@@ -18,6 +18,7 @@
         </a>
       </li>
     </ul>
+    <!-- <div>{{ startCountdown(6, new Date(Date.now() + 10000)) }}</div> -->
   </section>
 </template>
 
@@ -30,6 +31,7 @@ interface AccordianItem {
   text: string;
   icon: string;
   active: boolean;
+  countdown?: string;
 }
 
 const accordianEvents = reactive<AccordianItem[]>([
@@ -38,6 +40,7 @@ const accordianEvents = reactive<AccordianItem[]>([
   { id: 3, text: "Flemington", icon: "la:horse-head", active: false },
   { id: 4, text: "Ascot", icon: "la:horse-head", active: false },
   { id: 5, text: "ESL Season 19: CS2", icon: "fa6-solid:computer", active: false },
+  { id: 6, text: "TestRace", icon: "la:horse-head", active: false },
 ]);
 
 const toggleActive = (item: AccordianItem) => {
@@ -47,6 +50,28 @@ const toggleActive = (item: AccordianItem) => {
     }
   });
   item.active = !item.active;
+};
+
+const startCountdown = (raceId: number, startTime: Date) => {
+  const raceItem = accordianEvents.find((item) => item.id === raceId);
+  if (!raceItem) return;
+
+  const countdown = () => {
+    const now = new Date();
+    const timeRemaining = startTime.getTime() - now.getTime();
+    if (timeRemaining <= 0) {
+      clearInterval(interval);
+      raceItem.countdown = "00:00:00";
+      return;
+    }
+    const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
+    const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+    raceItem.countdown = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  };
+
+  countdown(); // Initial countdown
+  const interval = setInterval(countdown, 1000);
 };
 </script>
 
