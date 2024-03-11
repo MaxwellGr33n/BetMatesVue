@@ -1,5 +1,5 @@
 <template>
-  <section class="">
+  <section class="w-full">
     <ul class="h-16 flex px-3 mt-4 gap-3">
       <li v-for="item in featured" :key="item.id" class="aspect-square h-full">
         <a
@@ -53,5 +53,3 @@ const toggleActive = (item: FeaturedItem) => {
   }, 100);
 };
 </script>
-
-<style scoped></style>
