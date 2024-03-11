@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, onMounted, ref } from "vue";
+import { reactive, onMounted } from "vue";
 import { Icon } from "@iconify/vue/dist/iconify.js";
 
 let interval = 0;
@@ -41,11 +41,11 @@ interface eventItem {
 
 const events = reactive<eventItem[]>([
   { id: "1a1a1a", text: "Nowra", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T03:31:23Z" },
-  { id: "2a2a2a", text: "Hamilton", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T03:30:11Z" },
-  { id: "3a3a3a", text: "Flemington", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T03:32:56Z" },
-  { id: "4a4a4a", text: "Ascot", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T03:32:14Z" },
-  { id: "5a5a5a", text: "ESL Season 19: CS2", icon: "fa6-solid:computer", active: false, timeOfEvent: "2024-03-11T03:32:16Z" },
-  { id: "6a6a6a", text: "TestRace", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T03:31:38Z" },
+  { id: "2a2a2a", text: "Hamilton", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T04:20:11Z" },
+  { id: "3a3a3a", text: "Flemington", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T04:41:56Z" },
+  { id: "4a4a4a", text: "Ascot", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T05:32:14Z" },
+  { id: "5a5a5a", text: "ESL Season 19: CS2", icon: "fa6-solid:computer", active: false, timeOfEvent: "2024-03-11T04:29:16Z" },
+  { id: "6a6a6a", text: "TestRace", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T04:27:38Z" },
 ]);
 
 const toggleActive = (item: eventItem) => {
@@ -67,14 +67,34 @@ const startCountdown = (eventId: string) => {
     const start = new Date(eventItem.timeOfEvent); // Convert ISO 8601 string to Date object
     const timeRemaining = start.getTime() - now.getTime();
 
+    if (timeRemaining <= -15 * 60 * 1000) {
+      eventItem.timeToEvent = "";
+      return;
+    }
+
     if (timeRemaining <= 0) {
       eventItem.timeToEvent = "Live";
       return;
     }
-    const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
-    const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-    eventItem.timeToEvent = `${hours.toString()}:${minutes.toString()}:${seconds.toString().padStart(2, "0")}`;
+
+    if (timeRemaining < 15 * 60 * 1000) {
+      const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
+      const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+      let timeString = "";
+      if (hours > 0) {
+        timeString += `${hours.toString()}:`;
+      }
+      if (minutes > 0) {
+        timeString += `${minutes.toString()}m`;
+      }
+      if (seconds >= 0) {
+        timeString += ` ${seconds.toString().padStart(2, "0")}s`;
+      }
+
+      eventItem.timeToEvent = timeString;
+    }
   };
 
   countdown(); // Initial countdown
