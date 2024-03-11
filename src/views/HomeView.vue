@@ -10,6 +10,4 @@ import AccordianRaces from "@/components/AccordianRaces.vue";
   <EventCarousel />
   <HotEvent />
   <AccordianRaces />
-  <AccordianRaces />
-  <AccordianRaces />
 </template>
