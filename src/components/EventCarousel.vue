@@ -1,7 +1,7 @@
 <template>
   <section class="">
     <ul class="h-16 flex px-3 mt-4 gap-3">
-      <li v-for="item in events" :key="item.id" class="aspect-square h-full">
+      <li v-for="item in featured" :key="item.id" class="aspect-square h-full">
         <a
           @click="toggleActive(item)"
           :class="['flex flex-col items-center w-full h-full p-2 rounded-md drop-shadow', item.active ? 'bg-neutral-100 shadow-inner' : 'bg-white']"
@@ -20,14 +20,14 @@
 import { reactive } from "vue";
 import { Icon } from "@iconify/vue/dist/iconify.js";
 
-interface EventItem {
+interface FeaturedItem {
   id: number;
   text: string;
   icon: string;
   active: boolean;
 }
 
-const events = reactive<EventItem[]>([
+const featured = reactive<FeaturedItem[]>([
   { id: 1, text: "Promotions", icon: "bx:bxs-badge-dollar", active: false },
   { id: 2, text: "Randwick", icon: "la:horse-head", active: false },
   { id: 3, text: "Flemington", icon: "la:horse-head", active: false },
@@ -35,8 +35,8 @@ const events = reactive<EventItem[]>([
   { id: 5, text: "Fights", icon: "iconoir:boxing-glove", active: false },
 ]);
 
-const toggleActive = (item: EventItem) => {
-  events.forEach((link) => {
+const toggleActive = (item: FeaturedItem) => {
+  featured.forEach((link) => {
     if (link.id !== item.id) {
       link.active = false;
     }
