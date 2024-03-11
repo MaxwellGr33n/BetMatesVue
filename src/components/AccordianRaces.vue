@@ -21,14 +21,22 @@
         </a>
       </li>
     </ul>
+    <div class="sports-container">
+      <div v-for="(sports, index) in sportsStore.sportsData" :key="index" class="sports-item">
+        <p>{{ sports }}</p>
+      </div>
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { reactive, onMounted } from "vue";
+import { reactive, onMounted, computed } from "vue";
 import { Icon } from "@iconify/vue/dist/iconify.js";
+import { usesportsStore } from "@/stores/sportsStore";
 
 let interval = 0;
+const sportsStore = usesportsStore();
+const sportsData = computed(() => sportsStore.sportsData);
 
 interface eventItem {
   id: string;
@@ -90,16 +98,12 @@ const startCountdown = (eventId: string) => {
       const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
 
       let timeString = "";
-      if (hours > 0) {
-        timeString += `${hours.toString()}:`;
-      }
       if (minutes > 0) {
         timeString += `${minutes.toString()}m`;
       }
       if (seconds >= 0) {
         timeString += ` ${seconds.toString().padStart(2, "0")}s`;
       }
-
       eventItem.timeToEvent = timeString;
     }
   };
@@ -109,10 +113,11 @@ const startCountdown = (eventId: string) => {
 };
 
 onMounted(() => {
+  sportsStore.fetchsports();
+  console.log(JSON.parse(JSON.stringify(sportsStore.sportsData)));
   events.forEach((event) => {
     startCountdown(event.id);
   });
 });
 </script>
-
-<style scoped></style>
+@/stores/sportsStore
