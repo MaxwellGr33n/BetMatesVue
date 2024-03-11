@@ -6,7 +6,7 @@
         <li v-for="item in quickLinks" :key="item.id" class="w-1/4 h-full">
           <a
             @click="toggleActive(item)"
-            :class="['flex flex-col items-center justify-center w-full h-full', item.active ? 'bg-neutral-200 shadow-inner' : 'bg-neutral-50']"
+            :class="['flex flex-col items-center justify-center w-full h-full', item.isClicked ? 'bg-neutral-200 shadow-inner' : 'bg-neutral-50']"
           >
             <span class="flex items-center">
               <Icon v-if="item.icon" :icon="item.icon" />
@@ -28,14 +28,15 @@ interface QuickLinkItem {
   text: string;
   icon: string;
   active: boolean;
+  isClicked: boolean;
 }
 
 const quickLinks = reactive<QuickLinkItem[]>([
-  { id: 1, text: "Next Up", icon: "game-icons:stopwatch", active: false },
-  { id: 2, text: "Racing", icon: "la:horse-head", active: false },
-  { id: 3, text: "ESports", icon: "fa6-solid:computer", active: false },
-  { id: 4, text: "Notifications", icon: "fa6-regular:bell", active: false },
-  { id: 5, text: "Menu", icon: "radix-icons:hamburger-menu", active: false },
+  { id: 1, text: "Next Up", icon: "game-icons:stopwatch", active: false, isClicked: false },
+  { id: 2, text: "Racing", icon: "la:horse-head", active: false, isClicked: false },
+  { id: 3, text: "ESports", icon: "fa6-solid:computer", active: false, isClicked: false },
+  { id: 4, text: "Notifications", icon: "fa6-regular:bell", active: false, isClicked: false },
+  { id: 5, text: "Menu", icon: "radix-icons:hamburger-menu", active: false, isClicked: false },
 ]);
 
 const toggleActive = (item: QuickLinkItem) => {
@@ -45,6 +46,11 @@ const toggleActive = (item: QuickLinkItem) => {
     }
   });
   item.active = !item.active;
+  item.isClicked = true; // Set isClicked to true immediately
+
+  setTimeout(() => {
+    item.isClicked = false;
+  }, 100);
 };
 </script>
 

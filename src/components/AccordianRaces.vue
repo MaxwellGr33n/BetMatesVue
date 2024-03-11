@@ -8,7 +8,7 @@
       <li v-for="item in events" :key="item.id" class="w-full h-1/5 border-[1px]">
         <a
           @click="toggleActive(item)"
-          :class="['flex h-full p-3 items-center justify-between', item.active ? 'bg-neutral-100 shadow-inner' : 'bg-white']"
+          :class="['flex h-full p-3 items-center justify-between', item.isClicked ? 'bg-neutral-100 shadow-inner' : 'bg-white']"
         >
           <div class="h-2/3 flex items-center">
             <Icon v-if="item.icon" :icon="item.icon" height="22px" />
@@ -35,17 +35,19 @@ interface eventItem {
   text: string;
   icon: string;
   active: boolean;
+  isClicked: boolean;
   timeOfEvent: string; //ISO 8601
   timeToEvent?: string;
+  backgroundChanged?: boolean;
 }
 
 const events = reactive<eventItem[]>([
-  { id: "1a1a1a", text: "Nowra", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T03:31:23Z" },
-  { id: "2a2a2a", text: "Hamilton", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T04:20:11Z" },
-  { id: "3a3a3a", text: "Flemington", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T04:41:56Z" },
-  { id: "4a4a4a", text: "Ascot", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T05:32:14Z" },
-  { id: "5a5a5a", text: "ESL Season 19: CS2", icon: "fa6-solid:computer", active: false, timeOfEvent: "2024-03-11T04:29:16Z" },
-  { id: "6a6a6a", text: "TestRace", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T04:27:38Z" },
+  { id: "1a1a1a", text: "Nowra", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T03:31:23Z", isClicked: false },
+  { id: "2a2a2a", text: "Hamilton", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T04:20:11Z", isClicked: false },
+  { id: "3a3a3a", text: "Flemington", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T04:41:56Z", isClicked: false },
+  { id: "4a4a4a", text: "Ascot", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T05:32:14Z", isClicked: false },
+  { id: "5a5a5a", text: "ESL Season 19: CS2", icon: "fa6-solid:computer", active: false, timeOfEvent: "2024-03-11T04:29:16Z", isClicked: false },
+  { id: "6a6a6a", text: "TestRace", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T04:27:38Z", isClicked: false },
 ]);
 
 const toggleActive = (item: eventItem) => {
@@ -55,6 +57,11 @@ const toggleActive = (item: eventItem) => {
     }
   });
   item.active = !item.active;
+  item.isClicked = true; // Set isClicked to true immediately
+
+  setTimeout(() => {
+    item.isClicked = false;
+  }, 100);
 };
 
 const startCountdown = (eventId: string) => {
