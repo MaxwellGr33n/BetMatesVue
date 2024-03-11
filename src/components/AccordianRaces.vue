@@ -5,46 +5,51 @@
       <Icon icon="material-symbols:arrow-forward-ios" />
     </div>
     <ul class="w-full h-fit bg-neutral-50 rounded-md drop-shadow">
-      <li v-for="item in accordianEvents" :key="item.id" class="w-full h-1/5 border-[1px]">
+      <li v-for="item in events" :key="item.id" class="w-full h-1/5 border-[1px]">
         <a
           @click="toggleActive(item)"
           :class="['flex h-full p-3 items-center justify-between', item.active ? 'bg-neutral-100 shadow-inner' : 'bg-white']"
         >
-          <div v-if="item.icon" class="h-2/3 flex items-center">
+          <div class="h-2/3 flex items-center">
             <Icon v-if="item.icon" :icon="item.icon" height="22px" />
-            <span class="text-xs pl-2">{{ item.text }}</span>
+            <span class="text-sm pl-2">{{ item.text }}</span>
           </div>
-          <Icon icon="material-symbols:arrow-forward-ios" />
+          <div class="flex items-center gap-1">
+            <span v-if="item.timeToEvent" class="mb-[2px] text-sm">{{ item.timeToEvent }}</span>
+            <Icon icon="material-symbols:arrow-forward-ios" />
+          </div>
         </a>
       </li>
     </ul>
-    <!-- <div>{{ startCountdown(6, new Date(Date.now() + 10000)) }}</div> -->
   </section>
 </template>
 
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, onMounted, ref } from "vue";
 import { Icon } from "@iconify/vue/dist/iconify.js";
 
-interface AccordianItem {
-  id: number;
+let interval = 0;
+
+interface eventItem {
+  id: string;
   text: string;
   icon: string;
   active: boolean;
-  countdown?: string;
+  timeOfEvent: string; //ISO 8601
+  timeToEvent?: string;
 }
 
-const accordianEvents = reactive<AccordianItem[]>([
-  { id: 1, text: "Nowra", icon: "la:horse-head", active: false },
-  { id: 2, text: "Hamilton", icon: "la:horse-head", active: false },
-  { id: 3, text: "Flemington", icon: "la:horse-head", active: false },
-  { id: 4, text: "Ascot", icon: "la:horse-head", active: false },
-  { id: 5, text: "ESL Season 19: CS2", icon: "fa6-solid:computer", active: false },
-  { id: 6, text: "TestRace", icon: "la:horse-head", active: false },
+const events = reactive<eventItem[]>([
+  { id: "1a1a1a", text: "Nowra", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T03:31:23Z" },
+  { id: "2a2a2a", text: "Hamilton", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T03:30:11Z" },
+  { id: "3a3a3a", text: "Flemington", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T03:32:56Z" },
+  { id: "4a4a4a", text: "Ascot", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T03:32:14Z" },
+  { id: "5a5a5a", text: "ESL Season 19: CS2", icon: "fa6-solid:computer", active: false, timeOfEvent: "2024-03-11T03:32:16Z" },
+  { id: "6a6a6a", text: "TestRace", icon: "la:horse-head", active: false, timeOfEvent: "2024-03-11T03:31:38Z" },
 ]);
 
-const toggleActive = (item: AccordianItem) => {
-  accordianEvents.forEach((link) => {
+const toggleActive = (item: eventItem) => {
+  events.forEach((link) => {
     if (link.id !== item.id) {
       link.active = false;
     }
@@ -52,27 +57,35 @@ const toggleActive = (item: AccordianItem) => {
   item.active = !item.active;
 };
 
-const startCountdown = (raceId: number, startTime: Date) => {
-  const raceItem = accordianEvents.find((item) => item.id === raceId);
-  if (!raceItem) return;
+const startCountdown = (eventId: string) => {
+  const eventItem = events.find((item) => item.id === eventId);
+  if (!eventItem) return;
+  if (!eventItem.timeOfEvent) return;
 
   const countdown = () => {
     const now = new Date();
-    const timeRemaining = startTime.getTime() - now.getTime();
+    const start = new Date(eventItem.timeOfEvent); // Convert ISO 8601 string to Date object
+    const timeRemaining = start.getTime() - now.getTime();
+
     if (timeRemaining <= 0) {
-      clearInterval(interval);
-      raceItem.countdown = "00:00:00";
+      eventItem.timeToEvent = "Live";
       return;
     }
     const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
     const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-    raceItem.countdown = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    eventItem.timeToEvent = `${hours.toString()}:${minutes.toString()}:${seconds.toString().padStart(2, "0")}`;
   };
 
   countdown(); // Initial countdown
-  const interval = setInterval(countdown, 1000);
+  interval = setInterval(countdown, 1000);
 };
+
+onMounted(() => {
+  events.forEach((event) => {
+    startCountdown(event.id);
+  });
+});
 </script>
 
 <style scoped></style>
