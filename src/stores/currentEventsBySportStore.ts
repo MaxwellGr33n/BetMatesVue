@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
+/**
+ * Interface for current event by sport data.
+ */
 export interface IcurrentEventBySportData {
   id: string;
   sports_key: string;
@@ -10,12 +13,16 @@ export interface IcurrentEventBySportData {
   time_to_commence: string;
   interval_id?: NodeJS.Timeout | null;
   home_team: string;
+  home_team_icon: string;
   away_team: string;
   text?: string;
   active?: boolean;
   isClicked?: boolean;
 }
 
+/**
+ * Store for managing current events by sport.
+ */
 export const useCurrentEventsBySportStore = defineStore({
  id: 'currentEventBySport',
  state: () => ({
@@ -24,6 +31,10 @@ export const useCurrentEventsBySportStore = defineStore({
     errored: false,
  }),
  actions: {
+    /**
+     * Fetches events for a given sport. This API call has no cost
+     * @param {string} sport - The sport for which to fetch events.
+     */
     async fetchEvents(sport: string) {
       this.loading = true;
       try {
@@ -35,6 +46,26 @@ export const useCurrentEventsBySportStore = defineStore({
             for (const event of this.currentEvents) {
             event.sports_icon = 'mdi:football-australian';
           } break;
+          case 'rugbyleague_nrl': 
+            for (const event of this.currentEvents) {
+            event.sports_icon = 'material-symbols:sports-rugby';
+          } break;
+          case 'americanfootball_nfl': 
+            for (const event of this.currentEvents) {
+            event.sports_icon = 'ion:american-football';
+          } break;
+          case 'soccer_efl_champ': 
+            for (const event of this.currentEvents) {
+            event.sports_icon = 'game-icons:soccer-ball';
+          } break;
+          case 'baseball_mlb': 
+            for (const event of this.currentEvents) {
+            event.sports_icon = 'ion:baseball';
+          } break;
+          case 'basketball_nba': 
+            for (const event of this.currentEvents) {
+            event.sports_icon = 'solar:basketball-bold';
+          } break;
         }
       
       } catch (error) {
@@ -44,6 +75,10 @@ export const useCurrentEventsBySportStore = defineStore({
         this.loading = false;
       }
     },
+    /**
+     * Starts a countdown for a given event.
+     * @param {string} eventId - The ID of the event to start the countdown for.
+     */
     startCountdown(eventId: string) {
       if (!this.currentEvents.length) {
         console.log("No events available. Please fetch events first.");
@@ -96,6 +131,11 @@ export const useCurrentEventsBySportStore = defineStore({
       countdown(); // Initial countdown
       event.interval_id = setInterval(countdown, 1000);
     },
+    /**
+     * Updates the time to commence for a given event.
+     * @param {string} eventId - The ID of the event to update.
+     * @param {string} newTimeToCommence - The new time to commence.
+     */
     updateEventTimeToCommence(eventId: string, newTimeToCommence: string) {
       const eventIndex = this.currentEvents.findIndex(item => item.id === eventId);
       if (eventIndex !== -1) {
