@@ -1,5 +1,5 @@
 <template>
-  <section class="relative py-7 px-3 w-full">
+  <section class="relative py-5 px-3 w-full">
     <div class="flex items-center justify-center bg-violet-500 rounded-md p-3">
       <img
         class="absolute top-5"
