@@ -1,10 +1,14 @@
 <template>
-  <section class="w-full px-3 pb-3">
+  <section v-if="!currentEventsBySport.errored" class="w-full flex flex-col px-3 pb-3">
     <div class="flex items-center pb-3">
-      <h2 class="flex text-lg font-semibold">Next Racing</h2>
+      <h2 class="flex text-lg font-semibold">Next Events</h2>
       <Icon icon="material-symbols:arrow-forward-ios" />
     </div>
-    <ul class="w-full h-fit bg-neutral-50 rounded-md drop-shadow">
+    <div class="flex items-center justify-center">
+      <Icon v-if="currentEventsBySport.loading" height="48px" icon="eos-icons:loading" />
+    </div>
+    <p v-if="currentEventsBySport.errored">API error fetching event data...</p>
+    <ul v-if="!currentEventsBySport.loading" class="w-full h-fit bg-neutral-50 rounded-md drop-shadow">
       <li v-for="item in currentEventsBySport.currentEvents" :key="item.id" class="w-full h-1/5 border-[1px]">
         <a
           @click="toggleActive(item)"
@@ -16,17 +20,25 @@
           </div>
           <div class="flex items-center gap-1">
             <span class="mb-[2px] text-sm">{{ item.time_to_commence }}</span>
-            <Icon :icon="item.active ? 'material-symbols:keyboard-arrow-down' : 'material-symbols:keyboard-arrow-right'" />
+            <Icon :icon="item.active ? 'material-symbols:keyboard-arrow-up' : 'material-symbols:keyboard-arrow-down'" />
           </div>
         </a>
-        <div v-if="item.active" class="h-28 w-full bg-neutral-200"></div>
+        <div v-if="item.active" class="flex h-96 w-full bg-neutral-200">
+          <div class="w-2/5 flex flex-col items-center">
+            <Icon v-if="item.sports_icon" :icon="item.sports_icon" height="22px" />
+            <p>{{ item.home_team }}</p>
+          </div>
+          <div class="w-1/5 flex flex-col items-center justify-between">
+            <p></p>
+            <p class="pb-10">vs</p>
+          </div>
+          <div class="w-2/5 flex flex-col items-center">
+            <Icon v-if="item.sports_icon" :icon="item.sports_icon" height="22px" />
+            <p>{{ item.away_team }}</p>
+          </div>
+        </div>
       </li>
     </ul>
-    <div class="sports-container">
-      <div v-for="(event, index) in currentEventsBySport.currentEvents" :key="index" class="sports-item">
-        <p>{{ event }}</p>
-      </div>
-    </div>
   </section>
 </template>
 
@@ -52,8 +64,7 @@ const toggleActive = (event: IcurrentEventBySportData) => {
 };
 
 onMounted(async () => {
-  await currentEventsBySport.fetchEvents("aussierules_afl");
-  console.log(JSON.parse(JSON.stringify(currentEventsBySport.currentEvents)));
+  await currentEventsBySport.fetchEvents("soccer_efl_champ");
   currentEventsBySport.currentEvents.forEach((currentEvent) => {
     currentEventsBySport.startCountdown(currentEvent.id);
   });
