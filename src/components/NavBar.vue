@@ -1,7 +1,7 @@
 <template>
-  <nav class="flex justify-center fixed top-0 bg-violet-500 h-12 w-screen pl-4 z-10">
+  <nav class="flex justify-center fixed top-0 bg-violet-500 h-12 w-screen z-10">
     <div class="flex justify-between items-center w-screen sm:w-4/5 max-w-screen-lg">
-      <h1 class="font-logo italic text-2xl text-white">Betmates</h1>
+      <h1 class="font-logo pl-2 italic text-2xl text-white">Betmates</h1>
       <ul class="flex justify-center items-center h-full">
         <li v-for="item in navItems" :key="item.id" class="flex border-l-[1px] border-neutral-600 shadow-inner text-white text-sm w-full h-full">
           <a @click="toggleActive(item)" :class="[item.isClicked ? 'bg-violet-400 shadow-inner' : '', 'px-2 flex justify-center w-full h-full']">
