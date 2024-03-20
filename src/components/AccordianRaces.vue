@@ -1,15 +1,15 @@
 <template>
-  <section v-if="!currentEventsBySport.errored" class="w-full flex flex-col px-3 pb-3">
+  <section v-if="!currentEventsStore.errored" class="w-full flex flex-col px-3 pb-3">
     <div class="flex items-center pb-3">
       <h2 class="flex text-lg font-semibold">Next Events</h2>
       <Icon icon="material-symbols:arrow-forward-ios" />
     </div>
     <div class="flex items-center justify-center">
-      <Icon v-if="currentEventsBySport.loading" height="48px" icon="eos-icons:loading" />
+      <Icon v-if="currentEventsStore.loading" height="48px" icon="eos-icons:loading" />
     </div>
-    <p v-if="currentEventsBySport.errored">API error fetching event data...</p>
-    <ul v-if="!currentEventsBySport.loading" class="w-full h-fit bg-neutral-50 rounded-md drop-shadow">
-      <li v-for="item in currentEventsBySport.currentEvents" :key="item.id" class="w-full h-1/5 border-[1px]">
+    <p v-if="currentEventsStore.errored">API error fetching event data...</p>
+    <ul v-if="!currentEventsStore.loading" class="w-full h-fit bg-neutral-50 rounded-md drop-shadow">
+      <li v-for="item in currentEventsStore.filteredEvents" :key="item.id" class="w-full h-1/5 border-[1px]">
         <a
           @click="toggleActive(item)"
           :class="['flex h-full p-3 items-center justify-between', item.isClicked ? 'bg-neutral-100 shadow-inner' : 'bg-white']"
@@ -23,19 +23,22 @@
             <Icon :icon="item.active ? 'material-symbols:keyboard-arrow-up' : 'material-symbols:keyboard-arrow-down'" />
           </div>
         </a>
-        <div v-if="item.active" class="flex h-96 w-full bg-neutral-200">
-          <div class="w-2/5 flex flex-col items-center">
+        <div v-if="item.active" class="grid grid-cols-3 grid-rows-2 h-96 w-full bg-neutral-200">
+          <div class="flex flex-col items-center">
             <Icon v-if="item.sports_icon" :icon="item.sports_icon" height="22px" />
             <p>{{ item.home_team }}</p>
           </div>
-          <div class="w-1/5 flex flex-col items-center justify-between">
-            <p></p>
-            <p class="pb-10">vs</p>
-          </div>
-          <div class="w-2/5 flex flex-col items-center">
+          <div></div>
+          <div class="flex flex-col p-8 items-center justify-between">
             <Icon v-if="item.sports_icon" :icon="item.sports_icon" height="22px" />
             <p>{{ item.away_team }}</p>
           </div>
+          <div></div>
+          <div class="flex flex-col items-center justify-start">
+            <p></p>
+            <p class="pb-10 text-xl font-semibold">vs</p>
+          </div>
+          <div></div>
         </div>
       </li>
     </ul>
@@ -43,14 +46,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
 import { Icon } from "@iconify/vue/dist/iconify.js";
-import { useCurrentEventsBySportStore, type IcurrentEventBySportData } from "@/stores/currentEventsBySportStore";
+import { useCurrentEventsStore, type IcurrentEventsData } from "@/stores/currentEventsStore";
 
-const currentEventsBySport = useCurrentEventsBySportStore();
+const currentEventsStore = useCurrentEventsStore();
+var selectedEventArr: IcurrentEventsData | null;
 
-const toggleActive = (event: IcurrentEventBySportData) => {
-  currentEventsBySport.currentEvents.forEach((link) => {
+const toggleActive = (event: IcurrentEventsData) => {
+  Object.values(currentEventsStore.currentEvents).flat().forEach((link) => {
     if (link.id !== event.id) {
       link.active = false;
     }
@@ -62,11 +65,4 @@ const toggleActive = (event: IcurrentEventBySportData) => {
     event.isClicked = false;
   }, 100);
 };
-
-onMounted(async () => {
-  await currentEventsBySport.fetchEvents("soccer_efl_champ");
-  currentEventsBySport.currentEvents.forEach((currentEvent) => {
-    currentEventsBySport.startCountdown(currentEvent.id);
-  });
-});
 </script>
