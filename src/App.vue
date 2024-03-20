@@ -2,6 +2,26 @@
 import { RouterLink, RouterView } from "vue-router";
 import NavBar from "./components/NavBar.vue";
 import QuickLinks from "./components/QuickLinks.vue";
+import { onMounted } from "vue";
+import { useCurrentInSeasonSportsStore } from "@/stores/currentInSeasonSportsStore";
+import { useCurrentEventsStore } from "./stores/currentEventsStore";
+
+const currentInSeasonSportsStore = useCurrentInSeasonSportsStore();
+const currentEventsStore = useCurrentEventsStore();
+
+onMounted(async () => {
+  currentEventsStore.loading = true;
+  await currentEventsStore.ApiGetEvents("aussierules_afl");
+  currentEventsStore.updateFilteredEvents("aussierules_afl");
+  currentEventsStore.loading = false;
+
+  await currentInSeasonSportsStore.fetchSports();
+
+  for (const sport of currentInSeasonSportsStore.currentSports) {
+    await currentEventsStore.ApiGetEvents(sport.key);
+  }
+  console.log("all data available");
+});
 </script>
 
 <template>
@@ -11,5 +31,3 @@ import QuickLinks from "./components/QuickLinks.vue";
   </div>
   <QuickLinks />
 </template>
-
-<style scoped></style>
