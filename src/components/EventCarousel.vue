@@ -5,7 +5,7 @@
         <a
           @click="
             toggleActive(item);
-            currentEventsBySport.fetchEvents(item.toFetch);
+            currentEvents.updateFilteredEvents(item.toFetch);
           "
           :class="[
             'flex flex-col justify-between h-full w-full items-center p-2 rounded-md drop-shadow',
@@ -27,9 +27,9 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { Icon } from "@iconify/vue/dist/iconify.js";
-import { useCurrentEventsBySportStore } from "@/stores/currentEventsBySportStore";
+import { useCurrentEventsStore } from "@/stores/currentEventsStore";
 
-const currentEventsBySport = useCurrentEventsBySportStore();
+const currentEvents = useCurrentEventsStore();
 
 interface FeaturedItem {
   id: number;
