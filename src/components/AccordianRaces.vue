@@ -50,7 +50,6 @@ import { Icon } from "@iconify/vue/dist/iconify.js";
 import { useCurrentEventsStore, type IcurrentEventsData } from "@/stores/currentEventsStore";
 
 const currentEventsStore = useCurrentEventsStore();
-var selectedEventArr: IcurrentEventsData | null;
 
 const toggleActive = (event: IcurrentEventsData) => {
   Object.values(currentEventsStore.currentEvents).flat().forEach((link) => {
