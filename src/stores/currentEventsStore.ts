@@ -132,7 +132,7 @@ export const useCurrentEventsStore = defineStore({
       countdown(); // Initial countdown
       event.interval_id = setInterval(countdown, 1000);
     },
-    
+
     /**
      * Updates the time to commence for a given event.
      * @param {string} eventId - The ID of the event to update.
@@ -191,7 +191,18 @@ export const useCurrentEventsStore = defineStore({
         console.log("not found yet");
         return null;
       }
-      
     },
+
+    formatTime(isoTime: string): string {
+      const date = new Date(isoTime);
+      const weekday = date.toLocaleDateString('en-US', { weekday: 'long' });
+      const day = date.getDate();
+      const suffix = day % 10 === 1 && day !== 11 ? 'st' :
+                  day % 10 === 2 && day !== 12 ? 'nd' :
+                  day % 10 === 3 && day !== 13 ? 'rd' : 'th';
+      const hour = date.getHours().toString().padStart(2, '0');
+      const minute = date.getMinutes().toString().padStart(2, '0');
+      return `${weekday} ${day}${suffix} ${hour}${minute}`;
+    }
  },
 });
