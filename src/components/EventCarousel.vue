@@ -1,6 +1,6 @@
 <template>
-  <section class="mb-2 h-28 w-full">
-    <ul class="flex h-full p-3 gap-3 overflow-x-auto whitespace-nowrap" id="event-carousel">
+  <section class="mb-2 h-28 md:h-48 w-full">
+    <ul class="flex h-full p-3 gap-3 overflow-x-auto whitespace-nowrap md:overflow-hidden md:whitespace-normal justify-center" id="event-carousel">
       <li v-for="item in featured" :key="item.id" class="flex aspect-square">
         <a
           @click="
@@ -13,7 +13,7 @@
           ]"
         >
           <div v-if="item.icon" class="flex h-2/3 w-full items-center justify-center">
-            <Icon v-if="item.icon" :icon="item.icon" height="28px" />
+            <Icon v-if="item.icon" :icon="item.icon" height="56px" />
           </div>
           <div class="flex h-1/3 w-full items-center justify-center">
             <span class="text-2xs text-center text-wrap">{{ item.text }}</span>
@@ -46,8 +46,6 @@ const featured = reactive<FeaturedItem[]>([
   { id: 3, text: "Champions League", icon: "game-icons:soccer-ball", active: false, isClicked: false, toFetch: "soccer_efl_champ" },
   { id: 4, text: "MLB Baseball", icon: "ion:baseball", active: false, isClicked: false, toFetch: "baseball_mlb" },
   { id: 5, text: "NBA Basketball", icon: "solar:basketball-bold", active: false, isClicked: false, toFetch: "basketball_nba" },
-  { id: 6, text: "NBA Basketball", icon: "solar:basketball-bold", active: false, isClicked: false, toFetch: "basketball_nba" },
-  { id: 7, text: "NBA Basketball", icon: "solar:basketball-bold", active: false, isClicked: false, toFetch: "basketball_nba" },
 ]);
 
 const toggleActive = (item: FeaturedItem) => {
