@@ -23,22 +23,37 @@
             <Icon :icon="item.active ? 'material-symbols:keyboard-arrow-up' : 'material-symbols:keyboard-arrow-down'" />
           </div>
         </a>
-        <div v-if="item.active" class="grid grid-cols-3 grid-rows-2 h-96 w-full bg-neutral-200">
-          <div class="flex flex-col items-center">
-            <Icon v-if="item.sports_icon" :icon="item.sports_icon" height="22px" />
-            <p>{{ item.home_team }}</p>
+        <div v-if="item.active" class="flex flex-col h-96 w-full bg-neutral-200">
+          <div class="grid grid-cols-3 grid-rows-1">
+            <div class="flex flex-col px-8 pt-4 items-center justify-between">
+              <svg class="p-4" aria-hidden="true">
+                <use :href="`/Teams.svg#${item.home_team}`"></use>
+              </svg>
+              <p class="md:text-lg font-semibold">{{ item.home_team.split(" ").pop() }}</p>
+            </div>
+            <div class="pt-3 flex flex-col items-center justify-between text-sm md:text-md">
+              <p>{{ currentEventsStore.formatTime(item.commence_time) }}</p>
+              <p class="pb-10 text-xl font-medium">vs</p>
+            </div>
+            <div class="flex flex-col px-8 pt-4 items-center justify-between">
+              <svg class="p-4" aria-hidden="true">
+                <use :href="`/Teams.svg#${item.away_team}`"></use>
+              </svg>
+              <p class="md:text-lg font-semibold">{{ item.away_team.split(" ").pop() }}</p>
+            </div>
           </div>
-          <div></div>
-          <div class="flex flex-col p-8 items-center justify-between">
-            <Icon v-if="item.sports_icon" :icon="item.sports_icon" height="22px" />
-            <p>{{ item.away_team }}</p>
+          <div class="flex items-center justify-between px-12 py-4">
+            <button
+              class="text-sm font-semibold cursor-pointer leading-6 px-5 py-3 rounded-full text-gray-900 bg-white hover:bg-neutral-50 dark:text-neutral-50 dark:bg-gray-800 dark:hover:bg-gray-900 hover:shadow-md focus:shadow-md"
+            >
+              1.26
+            </button>
+            <button
+              class="text-sm font-semibold cursor-pointer leading-6 px-5 py-3 rounded-full text-gray-900 bg-white hover:bg-neutral-50 dark:text-neutral-50 dark:bg-gray-800 dark:hover:bg-gray-900 hover:shadow-md focus:shadow-md"
+            >
+              3.90
+            </button>
           </div>
-          <div></div>
-          <div class="flex flex-col items-center justify-start">
-            <p></p>
-            <p class="pb-10 text-xl font-semibold">vs</p>
-          </div>
-          <div></div>
         </div>
       </li>
     </ul>
@@ -48,6 +63,7 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue/dist/iconify.js";
 import { useCurrentEventsStore, type IcurrentEventsData } from "@/stores/currentEventsStore";
+
 
 const currentEventsStore = useCurrentEventsStore();
 
