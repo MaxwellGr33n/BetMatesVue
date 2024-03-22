@@ -46,12 +46,12 @@
             <button
               class="text-sm font-semibold cursor-pointer leading-6 px-5 py-3 rounded-full text-gray-900 bg-white hover:bg-neutral-50 dark:text-neutral-50 dark:bg-gray-800 dark:hover:bg-gray-900 hover:shadow-md focus:shadow-md"
             >
-              1.26
+              {{ (Math.random() * 9 + 1).toFixed(2) }}
             </button>
             <button
               class="text-sm font-semibold cursor-pointer leading-6 px-5 py-3 rounded-full text-gray-900 bg-white hover:bg-neutral-50 dark:text-neutral-50 dark:bg-gray-800 dark:hover:bg-gray-900 hover:shadow-md focus:shadow-md"
             >
-              3.90
+              {{ (Math.random() * 9 + 1).toFixed(2) }}
             </button>
           </div>
         </div>
