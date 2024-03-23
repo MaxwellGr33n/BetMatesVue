@@ -25,24 +25,24 @@
         </a>
         <div v-if="item.active" class="flex flex-col h-96 w-full bg-neutral-200">
           <div class="grid grid-cols-3 grid-rows-1">
-            <div class="flex flex-col px-8 pt-4 items-center justify-between">
-              <svg class="p-4" aria-hidden="true">
+            <div class="flex flex-col pt-10 items-center justify-center">
+              <svg class="h-2/3 w-full" aria-hidden="true">
                 <use :href="`/Teams.svg#${item.home_team}`"></use>
               </svg>
-              <p class="md:text-lg font-semibold">{{ item.home_team.split(" ").pop() }}</p>
+              <p class="h-1/3 pt-1 md:text-lg font-semibold">{{ item.home_team.split(" ").pop() }}</p>
             </div>
             <div class="pt-3 flex flex-col items-center justify-between text-sm md:text-md">
-              <p>{{ currentEventsStore.formatTime(item.commence_time) }}</p>
+              <p class="text-xs md:text-lg">{{ currentEventsStore.formatTime(item.commence_time) }}</p>
               <p class="pb-10 text-xl font-medium">vs</p>
             </div>
-            <div class="flex flex-col px-8 pt-4 items-center justify-between">
-              <svg class="p-4" aria-hidden="true">
+            <div class="flex flex-col pt-10 items-center justify-between">
+              <svg class="h-2/3 w-full" aria-hidden="true">
                 <use :href="`/Teams.svg#${item.away_team}`"></use>
               </svg>
-              <p class="md:text-lg font-semibold">{{ item.away_team.split(" ").pop() }}</p>
+              <p class="h-1/3 pt-1 md:text-lg font-semibold">{{ item.away_team.split(" ").pop() }}</p>
             </div>
           </div>
-          <div class="flex items-center justify-between px-12 py-4">
+          <div class="flex items-center justify-between px-6 md:px-24 py-4">
             <button
               class="text-sm font-semibold cursor-pointer leading-6 px-5 py-3 rounded-full text-gray-900 bg-white hover:bg-neutral-50 dark:text-neutral-50 dark:bg-gray-800 dark:hover:bg-gray-900 hover:shadow-md focus:shadow-md"
             >
