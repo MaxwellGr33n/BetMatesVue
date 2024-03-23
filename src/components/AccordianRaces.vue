@@ -23,10 +23,10 @@
             <Icon :icon="item.active ? 'material-symbols:keyboard-arrow-up' : 'material-symbols:keyboard-arrow-down'" />
           </div>
         </a>
-        <div v-if="item.active" class="flex flex-col h-96 w-full bg-neutral-200">
+        <div v-if="item.active" class="flex flex-col w-full bg-neutral-200">
           <div class="grid grid-cols-3 grid-rows-1">
             <div class="flex flex-col pt-10 items-center justify-center">
-              <svg class="h-2/3 w-full" aria-hidden="true">
+              <svg class="w-full" aria-hidden="true">
                 <use :href="`/Teams.svg#${item.home_team}`"></use>
               </svg>
               <p class="h-1/3 pt-1 md:text-lg font-semibold">{{ item.home_team.split(" ").pop() }}</p>
@@ -36,7 +36,7 @@
               <p class="pb-10 text-xl font-medium">vs</p>
             </div>
             <div class="flex flex-col pt-10 items-center justify-between">
-              <svg class="h-2/3 w-full" aria-hidden="true">
+              <svg class="w-full" aria-hidden="true">
                 <use :href="`/Teams.svg#${item.away_team}`"></use>
               </svg>
               <p class="h-1/3 pt-1 md:text-lg font-semibold">{{ item.away_team.split(" ").pop() }}</p>
