@@ -26,7 +26,7 @@
         <div v-if="item.active" class="flex flex-col w-full bg-neutral-200">
           <div class="grid grid-cols-3 grid-rows-1">
             <div class="flex flex-col pt-10 items-center justify-center">
-              <svg class="w-full" aria-hidden="true">
+              <svg class="h-32 md:h-52 w-full" aria-hidden="true">
                 <use :href="`/Teams.svg#${item.home_team}`"></use>
               </svg>
               <p class="h-1/3 pt-1 md:text-lg font-semibold">{{ item.home_team.split(" ").pop() }}</p>
@@ -36,7 +36,7 @@
               <p class="pb-10 text-xl font-medium">vs</p>
             </div>
             <div class="flex flex-col pt-10 items-center justify-between">
-              <svg class="w-full" aria-hidden="true">
+              <svg class="h-32 md:h-52 w-full" aria-hidden="true">
                 <use :href="`/Teams.svg#${item.away_team}`"></use>
               </svg>
               <p class="h-1/3 pt-1 md:text-lg font-semibold">{{ item.away_team.split(" ").pop() }}</p>
