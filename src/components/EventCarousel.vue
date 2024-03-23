@@ -1,6 +1,9 @@
 <template>
   <section class="mb-2 h-28 md:h-48 w-full">
-    <ul class="flex h-full p-3 gap-3 overflow-x-auto whitespace-nowrap md:overflow-hidden md:whitespace-normal justify-start" id="event-carousel">
+    <ul
+      class="flex h-full p-3 gap-3 overflow-x-auto overflow-y-hidden whitespace-nowrap md:overflow-hidden md:whitespace-normal justify-start"
+      id="event-carousel"
+    >
       <li v-for="item in featured" :key="item.id" class="flex aspect-square">
         <a
           @click="
