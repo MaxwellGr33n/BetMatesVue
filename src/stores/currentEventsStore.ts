@@ -55,7 +55,7 @@ export const useCurrentEventsStore = defineStore({
             case 'americanfootball_nfl':
             event.sports_icon = 'ion:american-football';
             break;
-            case 'soccer_efl_champ':
+            case 'soccer_australia_aleague':
             event.sports_icon = 'game-icons:soccer-ball';
             break;
             case 'baseball_mlb':

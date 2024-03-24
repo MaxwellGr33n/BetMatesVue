@@ -13,14 +13,11 @@ onMounted(async () => {
   currentEventsStore.loading = true;
   await currentEventsStore.ApiGetEvents("aussierules_afl");
   currentEventsStore.updateFilteredEvents("aussierules_afl");
+  await currentEventsStore.ApiGetEvents("rugbyleague_nrl");
+  await currentEventsStore.ApiGetEvents("soccer_australia_aleague");
+  await currentEventsStore.ApiGetEvents("baseball_mlb");
+  await currentEventsStore.ApiGetEvents("basketball_nba");
   currentEventsStore.loading = false;
-
-  await currentInSeasonSportsStore.fetchSports();
-
-  for (const sport of currentInSeasonSportsStore.currentSports) {
-    await currentEventsStore.ApiGetEvents(sport.key);
-  }
-  console.log("all data available");
 });
 </script>
 

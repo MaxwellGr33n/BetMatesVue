@@ -46,7 +46,7 @@ interface FeaturedItem {
 const featured = reactive<FeaturedItem[]>([
   { id: 1, text: "AFL Footy", icon: "mdi:football-australian", active: false, isClicked: false, toFetch: "aussierules_afl" },
   { id: 2, text: "NRL Rugby", icon: "material-symbols:sports-rugby", active: false, isClicked: false, toFetch: "rugbyleague_nrl" },
-  { id: 3, text: "Champs League", icon: "game-icons:soccer-ball", active: false, isClicked: false, toFetch: "soccer_efl_champ" },
+  { id: 3, text: "A League", icon: "game-icons:soccer-ball", active: false, isClicked: false, toFetch: "soccer_australia_aleague" },
   { id: 4, text: "MLB Baseball", icon: "ion:baseball", active: false, isClicked: false, toFetch: "baseball_mlb" },
   { id: 5, text: "NBA Basketball", icon: "solar:basketball-bold", active: false, isClicked: false, toFetch: "basketball_nba" },
 ]);
