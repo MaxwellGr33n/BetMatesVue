@@ -1,14 +1,14 @@
 <template>
   <nav class="flex justify-center fixed top-0 bg-violet-500 h-12 w-screen z-10">
     <div class="flex justify-between items-center w-screen sm:w-4/5 max-w-screen-lg">
-      <h1 class="font-logo pl-2 italic text-2xl text-white">Betmates</h1>
+      <RouterLink to="/" class="font-logo pl-2 italic text-2xl text-white">Betmates</RouterLink>
       <ul class="flex justify-center items-center h-full">
         <li v-for="item in navItems" :key="item.id" class="flex border-l-[1px] border-neutral-600 shadow-inner text-white text-sm w-full h-full">
           <a @click="toggleActive(item)" :class="[item.isClicked ? 'bg-violet-400 shadow-inner' : '', 'px-2 flex justify-center w-full h-full']">
             <span v-if="item.icon" class="flex items-center">
               <Icon v-if="item.icon" :icon="item.icon" />
             </span>
-            <span class="flex items-center">{{ item.text }}</span>
+            <RouterLink v-if="item.route" class="flex items-center" :to="item.route">{{ item.text }}</RouterLink>
           </a>
         </li>
       </ul>
@@ -20,10 +20,12 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { Icon } from "@iconify/vue/dist/iconify.js";
+import { RouterLink } from "vue-router";
 
 interface NavItem {
   id: number;
   text?: string;
+  route?: string;
   icon?: string;
   active: boolean;
   isClicked: boolean;
@@ -31,8 +33,9 @@ interface NavItem {
 
 const navItems = reactive<NavItem[]>([
   { id: 1, icon: "fa6-solid:magnifying-glass", active: false, isClicked: false },
-  { id: 2, text: "Login", active: false, isClicked: false },
-  { id: 3, text: "Register", active: false, isClicked: false },
+  { id: 2, text: "Login", route: "/login", active: false, isClicked: false },
+  { id: 3, text: "Register", route: "/register", active: false, isClicked: false },
+  { id: 3, text: "Bet Slip", route: "/betslip", active: false, isClicked: false },
 ]);
 
 const toggleActive = (item: NavItem) => {
