@@ -4,7 +4,7 @@
       class="flex h-full p-3 gap-3 overflow-x-auto overflow-y-hidden whitespace-nowrap md:overflow-hidden md:whitespace-normal justify-start"
       id="event-carousel"
     >
-      <li v-for="item in featured" :key="item.id" class="flex h-24 md:h-48 aspect-square">
+      <li v-for="item in featured" :key="item.id" class="flex h-24 md:h-40 aspect-square">
         <a
           @click="
             toggleActive(item);
