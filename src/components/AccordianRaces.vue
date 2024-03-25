@@ -64,7 +64,6 @@
 import { Icon } from "@iconify/vue/dist/iconify.js";
 import { useCurrentEventsStore, type IcurrentEventsData } from "@/stores/currentEventsStore";
 
-
 const currentEventsStore = useCurrentEventsStore();
 
 const toggleActive = (event: IcurrentEventsData) => {
