@@ -40,7 +40,7 @@ export const useCurrentEventsStore = defineStore({
     async ApiGetEvents(sport: string) {
       try {
         if (!this.currentEvents[sport]) {
-          const response = await axios.get(`https://api.the-odds-api.com/v4/sports/${sport}/events/?apiKey=c1f97b82364f6a814a166ec0bf70f02e`);
+          const response = await axios.get(`https://api.the-odds-api.com/v4/sports/${sport}/events/?apiKey=${import.meta.env.VITE_ODDS_API_KEY}`);
           this.currentEvents[sport] = response.data;
         }
 
