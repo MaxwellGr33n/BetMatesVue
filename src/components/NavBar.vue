@@ -3,13 +3,21 @@
     <div class="flex justify-between items-center w-screen sm:w-4/5 max-w-screen-lg">
       <RouterLink to="/" class="font-logo pl-2 italic text-2xl text-white">Betmates</RouterLink>
       <ul class="flex justify-center items-center h-full">
-        <li v-for="item in navItems" :key="item.id" class="flex border-l-[1px] border-neutral-600 shadow-inner text-white text-sm w-full h-full">
-          <a @click="toggleActive(item)" :class="[item.isClicked ? 'bg-violet-400 shadow-inner' : '', 'px-2 flex justify-center w-full h-full']">
-            <span v-if="item.icon" class="flex items-center">
-              <Icon v-if="item.icon" :icon="item.icon" />
-            </span>
-            <RouterLink v-if="item.route" class="flex items-center" :to="item.route">{{ item.text }}</RouterLink>
-          </a>
+        <li class="flex border-l-[1px] px-2 border-neutral-600 shadow-inner text-white w-full h-full">
+          <span class="flex items-center">
+            <Icon icon="fa6-solid:magnifying-glass" />
+          </span>
+        </li>
+        <li v-if="!authStore.isLoggedIn" class="flex border-l-[1px] px-2 border-neutral-600 shadow-inner text-white text-sm w-full h-full">
+          <RouterLink class="flex items-center" to="/login">Login</RouterLink>
+        </li>
+        <li v-if="!authStore.isLoggedIn" class="flex border-l-[1px] px-2 border-neutral-600 shadow-inner text-white text-sm w-full h-full">
+          <RouterLink class="flex items-center" to="/register">Register</RouterLink>
+        </li>
+        <li v-if="authStore.isLoggedIn" class="flex border-x-[1px] pl-2 pr-1 border-neutral-600 shadow-inner text-white text-sm w-full h-full">
+          <button @click="authStore.signOut">
+            <Icon icon="material-symbols:logout" height="22px" />
+          </button>
         </li>
       </ul>
     </div>
@@ -18,37 +26,9 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from "vue";
 import { Icon } from "@iconify/vue/dist/iconify.js";
 import { RouterLink } from "vue-router";
+import { useAuthStore } from "@/stores/authStore";
 
-interface NavItem {
-  id: number;
-  text?: string;
-  route?: string;
-  icon?: string;
-  active: boolean;
-  isClicked: boolean;
-}
-
-const navItems = reactive<NavItem[]>([
-  { id: 1, icon: "fa6-solid:magnifying-glass", active: false, isClicked: false },
-  { id: 2, text: "Login", route: "/login", active: false, isClicked: false },
-  { id: 3, text: "Register", route: "/register", active: false, isClicked: false },
-  { id: 3, text: "Bet Slip", route: "/betslip", active: false, isClicked: false },
-]);
-
-const toggleActive = (item: NavItem) => {
-  navItems.forEach((link) => {
-    if (link.id !== item.id) {
-      link.active = false;
-    }
-  });
-  item.active = !item.active;
-  item.isClicked = true; // Set isClicked to true immediately
-
-  setTimeout(() => {
-    item.isClicked = false;
-  }, 100);
-};
+const authStore = useAuthStore();
 </script>
