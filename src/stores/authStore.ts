@@ -4,7 +4,6 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, type User } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
-import { useRouter } from 'vue-router';
 
 export const useAuthStore = defineStore({
  id: 'auth',
@@ -22,16 +21,14 @@ export const useAuthStore = defineStore({
       this.errMsg = '';
       try {
         const result = await signInWithEmailAndPassword(getAuth(), email, password);
-        // const router = useRouter();
-        // router.push("/");
         this.user = result.user;
         this.isLoggedIn = true;
       } catch (error) {
         this.errored = true;
-        console.log("there was an error");
+        console.log(error);
         switch ((error as FirebaseError).code) {
           case "auth/invalid-credential":
-            this.errMsg = "Wrong password";
+            this.errMsg = "Email or password was incorrect";
             break;
           case "auth/user-not-found":
             this.errMsg = "User not found";
@@ -48,19 +45,16 @@ export const useAuthStore = defineStore({
         }
     },
 
-
     async signInWithGoogle() {
       this.loading = true;
       this.errored = false;
       this.errMsg = '';
-      const provider = new GoogleAuthProvider();
       try {
-        const result = await signInWithPopup(getAuth(), provider);
+        const auth = getAuth();
+        const provider = new GoogleAuthProvider();
+        const result = await signInWithPopup(auth, provider);
         this.user = result.user;
         this.isLoggedIn = true;
-        // Redirect to home page or any other page after successful login
-        const router = useRouter();
-        router.push("/");
       } catch (error) {
         this.errored = true;
         this.errMsg = "Failed to sign in with Google";
@@ -76,14 +70,17 @@ export const useAuthStore = defineStore({
       this.errored = false;
       this.errMsg = '';
       try {
-        await createUserWithEmailAndPassword(getAuth(), email, password);
+        const result = await createUserWithEmailAndPassword(getAuth(), email, password); 
+        this.user = result.user;
+        this.isLoggedIn = true; 
       } catch (error) {
+        this.errored = true;
         switch ((error as FirebaseError).code) {
-          case "auth/invalid-credential":
-            this.errMsg = "Wrong password";
+          case "auth/invalid-email":
+            this.errMsg = "Email invalid";
             break;
-          case "auth/user-not-found":
-            this.errMsg = "User not found";
+          case "auth/email-already-in-use":
+            this.errMsg = "Email already exists";
             break;
           case "auth/wrong-password":
             this.errMsg = "Incorrect password";
@@ -105,8 +102,6 @@ export const useAuthStore = defineStore({
         await signOut(getAuth());
         this.isLoggedIn = false;
         this.user = null;
-        // const router = useRouter();
-        // router.push("/");
       } catch (error) {
         alert((error as Error).message);
       } finally {
