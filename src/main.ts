@@ -7,10 +7,10 @@ import './assets/styles.css'
 import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-
+const firebaseAPIKey = import.meta.env.VITE_FIREBASE_API_KEY;
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBi_HU7cdANmhJtd1oPWmq9Ws7vD3MCw5c",
+  apiKey: firebaseAPIKey,
   authDomain: "betmates-e4e02.firebaseapp.com",
   projectId: "betmates-e4e02",
   storageBucket: "betmates-e4e02.appspot.com",
