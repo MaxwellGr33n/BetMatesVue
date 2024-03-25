@@ -1,5 +1,7 @@
 <template>
-  <div></div>
+  <div>
+    <p>Betslip</p>
+  </div>
 </template>
 
 <script setup lang="ts"></script>
