@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
+import { RouterView } from "vue-router";
 import NavBar from "./components/NavBar.vue";
 import QuickLinks from "./components/QuickLinks.vue";
 import { onMounted } from "vue";
-import { useCurrentInSeasonSportsStore } from "@/stores/currentInSeasonSportsStore";
 import { useCurrentEventsStore } from "./stores/currentEventsStore";
 
-const currentInSeasonSportsStore = useCurrentInSeasonSportsStore();
 const currentEventsStore = useCurrentEventsStore();
 
 onMounted(async () => {
