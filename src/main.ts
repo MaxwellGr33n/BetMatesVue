@@ -2,9 +2,13 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useAuthStore } from './stores/authStore';
 import './assets/styles.css'
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { getFirestore } from 'firebase/firestore';
+import { useBetsStore } from './stores/betsStore';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 const firebaseAPIKey = import.meta.env.VITE_FIREBASE_API_KEY;
@@ -21,9 +25,27 @@ const firebaseConfig = {
 // Initialize Firebase
 initializeApp(firebaseConfig);
 
-const app = createApp(App);
+export const db = getFirestore();
 
+const app = createApp(App);
 app.use(createPinia());
 app.use(router);
+
+const auth = getAuth();
+const authStore = useAuthStore();
+const betStore = useBetsStore();
+
+onAuthStateChanged(auth, (user) => {
+ if (user) {
+    // User is signed in, update the store
+    authStore.user = user;
+    authStore.isLoggedIn = true;
+    betStore.fetchAndPopulateUserData(user.uid);
+ } else {
+    // User is signed out
+    authStore.user = null;
+    authStore.isLoggedIn = false;
+ }
+});
 
 app.mount('#app');
