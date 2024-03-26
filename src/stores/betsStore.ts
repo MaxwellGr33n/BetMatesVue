@@ -83,12 +83,10 @@ export const useBetsStore = defineStore({
       });
     },
 
-    async initBetslipAndBalance(userId: string) {
+    async initBetslip(userId: string) {
       try {
         const betslipRef = doc(db, "betslips", userId);
         const betslipDoc = await getDoc(betslipRef);
-        const userRef = doc(db, "users", userId);
-        const userDoc = await getDoc(userRef);
 
         if (!betslipDoc.exists()) {
           await setDoc(betslipRef, {
@@ -99,6 +97,16 @@ export const useBetsStore = defineStore({
         } else {
           throw new Error("A betslip with this userID already exists.");
         }
+      } catch (error) {
+        console.error("Error creating betslip:", error);
+      }
+    },
+
+    async initBalance(userId: string) {
+      try {
+        const userRef = doc(db, "users", userId);
+        const userDoc = await getDoc(userRef);
+
         if (!userDoc.exists()) {
           await setDoc(userRef, {
             userId: userId,
@@ -108,7 +116,7 @@ export const useBetsStore = defineStore({
           throw new Error("This user is already setup.");
         }
       } catch (error) {
-        console.error("Error creating betslip:", error);
+        console.error("Error initializing balance:", error);
       }
     },
 
