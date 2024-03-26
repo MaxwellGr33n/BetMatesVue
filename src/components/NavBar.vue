@@ -14,7 +14,14 @@
         <li v-if="!authStore.isLoggedIn" class="flex border-l-[1px] px-2 border-neutral-600 shadow-inner text-white text-sm w-full h-full">
           <RouterLink class="flex items-center" to="/register">Register</RouterLink>
         </li>
-        <li v-if="authStore.isLoggedIn" class="flex border-x-[1px] pl-2 pr-1 border-neutral-600 shadow-inner text-white text-sm w-full h-full">
+        <li
+          v-if="authStore.isLoggedIn"
+          class="flex items-center border-l-[1px] pl-2 pr-1 border-neutral-600 shadow-inner text-white text-sm w-full h-full"
+        >
+          <Icon icon="material-symbols:account-circle" height="28px" />
+          <p class="text-nowrap px-1" v-if="authStore.user?.displayName">Hi {{ authStore.user.displayName }}</p>
+        </li>
+        <li v-if="authStore.isLoggedIn" class="flex border-x-[1px] pl-3 pr-2 border-neutral-600 shadow-inner text-white text-sm w-full h-full">
           <button @click="authStore.signOut">
             <Icon icon="material-symbols:logout" height="22px" />
           </button>
