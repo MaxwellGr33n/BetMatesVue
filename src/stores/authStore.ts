@@ -2,8 +2,11 @@
 
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, type User } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, updateProfile, type User } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
+import { useBetsStore } from './betsStore';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/main';
 
 export const useAuthStore = defineStore({
  id: 'auth',
@@ -54,6 +57,22 @@ export const useAuthStore = defineStore({
         const provider = new GoogleAuthProvider();
         const result = await signInWithPopup(auth, provider);
         this.user = result.user;
+        const betsStore = useBetsStore();
+
+        // Fetch the user's betslip and user documents
+        const betslipRef = doc(db, "betslips", result.user.uid);
+        const betslipDoc = await getDoc(betslipRef);
+        const userRef = doc(db, "users", result.user.uid);
+        const userDoc = await getDoc(userRef);
+
+        if (!betslipDoc.exists()) {
+          await betsStore.initBetslip(result.user.uid);
+        } else if (!userDoc.exists()) {
+          await betsStore.initBalance(result.user.uid);
+        } else {
+          // If both documents exist, log a message or handle accordingly
+          console.log("User already has a betslip and user document.");
+        }
         this.isLoggedIn = true;
       } catch (error) {
         this.errored = true;
@@ -65,14 +84,19 @@ export const useAuthStore = defineStore({
     },
 
 
-    async register(email: string, password: string) {
+    async register(email: string, password: string, displayName: string) {
       this.loading = true;
       this.errored = false;
       this.errMsg = '';
       try {
-        const result = await createUserWithEmailAndPassword(getAuth(), email, password); 
+        const auth = getAuth();
+        const result = await createUserWithEmailAndPassword(auth, email, password); 
         this.user = result.user;
-        this.isLoggedIn = true; 
+        await updateProfile(result.user, { displayName });
+        this.isLoggedIn = true;
+        const betsStore = useBetsStore();
+        await betsStore.initBetslip(result.user.uid); 
+        await betsStore.initBalance(result.user.uid);
       } catch (error) {
         this.errored = true;
         switch ((error as FirebaseError).code) {
