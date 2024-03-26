@@ -1,6 +1,23 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
+export interface IOutcome {
+ name: string;
+ price: number;
+}
+
+export interface IMarket {
+ key: string;
+ outcomes: IOutcome[];
+}
+
+export interface IBookmaker {
+ key: string;
+ title: string;
+ last_update: string; // ISO 8601
+ markets: IMarket[];
+}
+
 /**
  * Interface for current event by sport data.
  */
@@ -13,11 +30,11 @@ export interface IcurrentEventsData {
   time_to_commence: string;
   interval_id?: NodeJS.Timeout | null;
   home_team: string;
-  home_team_icon: string;
   away_team: string;
   text?: string;
   active?: boolean;
   isClicked?: boolean;
+  bookmakers?: IBookmaker[];
 }
 
 /**
@@ -37,10 +54,10 @@ export const useCurrentEventsStore = defineStore({
      * Fetches events for a given sport. This API call has no cost
      * @param {string} sport - The sport for which to fetch events.
      */
-    async ApiGetEvents(sport: string) {
+    async ApiGetEventsWithOdds(sport: string) {
       try {
         if (!this.currentEvents[sport]) {
-          const response = await axios.get(`https://api.the-odds-api.com/v4/sports/${sport}/events/?apiKey=${import.meta.env.VITE_ODDS_API_KEY}`);
+          const response = await axios.get(`https://api.the-odds-api.com/v4/sports/${sport}/odds?apiKey=${import.meta.env.VITE_ODDS_API_KEY}&regions=au&markets=h2h&dateFormat=iso&oddsFormat=decimal`);
           this.currentEvents[sport] = response.data;
         }
 
@@ -181,6 +198,24 @@ export const useCurrentEventsStore = defineStore({
         console.log("not found yet");
         return null;
       }
+    },
+
+    /**
+     * Fetches an event instance by its ID.
+     * @param {string} eventId - The ID of the event to fetch.
+     * @returns {IcurrentEventsData | null} The event instance if found, otherwise null.
+     */
+    fetchEventById(eventId: string): IcurrentEventsData | null {
+      let eventFound: IcurrentEventsData | null = null;
+      // Iterate over all sports events
+      for (const sportEvents of Object.values(this.currentEvents)) {
+        const event = sportEvents.find(item => item.id === eventId);
+        if (event) {
+          eventFound = event;
+          break; 
+        }
+      }
+      return eventFound;
     },
 
     updateFilteredEvents(sport: string) {
