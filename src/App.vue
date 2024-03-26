@@ -2,34 +2,21 @@
 import { RouterView } from "vue-router";
 import { onMounted } from "vue";
 import { useCurrentEventsStore } from "./stores/currentEventsStore";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useAuthStore } from "./stores/authStore";
 import NavBar from "./components/NavBar.vue";
 import QuickLinks from "./components/QuickLinks.vue";
+import { useBetsStore } from "./stores/betsStore";
 
 const currentEventsStore = useCurrentEventsStore();
-const authStore = useAuthStore();
+const betsStore = useBetsStore();
 
 onMounted(async () => {
-  const auth = getAuth();
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      authStore.isLoggedIn = true;
-    } else {
-      authStore.isLoggedIn = false;
-    }
-  });
-
   currentEventsStore.loading = true;
-  await currentEventsStore.ApiGetEvents("aussierules_afl");
-
+  // await currentEventsStore.ApiGetEventsWithOdds("aussierules_afl");
   currentEventsStore.updateFilteredEvents("aussierules_afl");
-
-  await currentEventsStore.ApiGetEvents("rugbyleague_nrl");
-  await currentEventsStore.ApiGetEvents("soccer_australia_aleague");
-  await currentEventsStore.ApiGetEvents("baseball_mlb");
-  await currentEventsStore.ApiGetEvents("basketball_nba");
   currentEventsStore.loading = false;
+  console.log(JSON.stringify(currentEventsStore.currentEvents, null, 2));
+  console.log(JSON.stringify(betsStore.bets));
+  console.log(betsStore.userId);
 });
 </script>
 
