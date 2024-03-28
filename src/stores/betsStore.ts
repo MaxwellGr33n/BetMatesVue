@@ -116,7 +116,7 @@ export const useBetsStore = defineStore({
         if (!userDoc.exists()) {
           await setDoc(userRef, {
             userId: userId,
-            accountBalance: 0,
+            accountBalance: 10,
           });
         } else {
           throw new Error("This user is already setup.");
