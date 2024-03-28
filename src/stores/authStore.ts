@@ -70,7 +70,6 @@ export const useAuthStore = defineStore({
         } else if (!userDoc.exists()) {
           await betsStore.initBalance(result.user.uid);
         } else {
-          // If both documents exist, log a message or handle accordingly
           console.log("User already has a betslip and user document.");
         }
         this.isLoggedIn = true;
@@ -93,10 +92,10 @@ export const useAuthStore = defineStore({
         const result = await createUserWithEmailAndPassword(auth, email, password); 
         this.user = result.user;
         await updateProfile(result.user, { displayName });
-        this.isLoggedIn = true;
         const betsStore = useBetsStore();
         await betsStore.initBetslip(result.user.uid); 
         await betsStore.initBalance(result.user.uid);
+        this.isLoggedIn = true;
       } catch (error) {
         this.errored = true;
         switch ((error as FirebaseError).code) {
@@ -110,7 +109,7 @@ export const useAuthStore = defineStore({
             this.errMsg = "Incorrect password";
             break;
           default:
-            this.errMsg = "Email or password was incorrect";
+            this.errMsg = "Error please try again";
             break;
         }
       } finally {
