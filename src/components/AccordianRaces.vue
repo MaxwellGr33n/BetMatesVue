@@ -50,7 +50,7 @@
             </div>
           </div>
           <div class="flex items-center justify-center" v-if="!authStore.isLoggedIn">
-            <p class="text-xl">Log in now to see live odds</p>
+            <p class="text-xl p-5">Log in now to see live odds</p>
           </div>
           <div class="flex flex-col items-center justify-between" v-if="authStore.isLoggedIn">
             <div class="flex items-center justify-center">

@@ -3,11 +3,6 @@
     <div class="flex justify-between items-center w-screen sm:w-4/5 max-w-screen-lg">
       <RouterLink to="/" class="font-logo pl-2 italic text-2xl text-white">Betmates</RouterLink>
       <ul class="flex justify-center items-center h-full">
-        <li class="flex border-l-[1px] px-2 border-neutral-600 shadow-inner text-white w-full h-full">
-          <span class="flex items-center">
-            <Icon icon="fa6-solid:magnifying-glass" />
-          </span>
-        </li>
         <li v-if="!authStore.isLoggedIn" class="flex border-l-[1px] px-2 border-neutral-600 shadow-inner text-white text-sm w-full h-full">
           <RouterLink class="flex items-center" to="/login">Login</RouterLink>
         </li>
