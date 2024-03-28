@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-neutral-100 p-[50px] rounded-lg">
+  <div class="bg-neutral-100 p-[50px] max-w-5/6 rounded-lg">
     <h2 class="text-2xl pb-4">{{ title }}</h2>
     <p class="text-lg">{{ msg }}</p>
     <div class="flex items-center justify-between mt-10">
