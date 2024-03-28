@@ -57,7 +57,7 @@ export const useCurrentEventsStore = defineStore({
     async ApiGetEventsWithOdds(sport: string) {
       try {
         if (!this.currentEvents[sport]) {
-          const response = await axios.get(`https://api.the-odds-api.com/v4/sports/${sport}/odds?apiKey=${import.meta.env.VITE_ODDS_API_KEY}&regions=au&markets=h2h&dateFormat=iso&oddsFormat=decimal`);
+          const response = await axios.get(`https://api.the-odds-api.com/v4/sports/${sport}/odds?apiKey=${import.meta.env.VITE_ODDS_API_KEY}&regions=au&markets=h2h&dateFormat=iso&oddsFormat=decimal&bookmakers=ladbrokes_au%2Cneds%2Csportsbet%2Cunibet%2Ctab`);
           this.currentEvents[sport] = response.data;
         }
 
@@ -237,7 +237,7 @@ export const useCurrentEventsStore = defineStore({
                   day % 10 === 3 && day !== 13 ? 'rd' : 'th';
       const hour = date.getHours().toString().padStart(2, '0');
       const minute = date.getMinutes().toString().padStart(2, '0');
-      return `${weekday} ${day}${suffix} ${hour}${minute}`;
+      return `${weekday} ${day}${suffix} ${hour}:${minute}`;
     }
  },
 });
