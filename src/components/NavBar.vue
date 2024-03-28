@@ -23,7 +23,7 @@
           <Icon icon="material-symbols:account-circle" height="28px" />
           <p class="text-nowrap px-1" v-if="authStore.user?.displayName">Hi {{ authStore.user.displayName }}</p>
         </li>
-        <li v-if="authStore.isLoggedIn" class="flex border-x-[1px] pl-3 pr-2 border-neutral-600 shadow-inner text-white text-sm w-full h-full">
+        <li v-if="authStore.isLoggedIn" class="flex border-x-[1px] pl-3 md:pr-2 border-neutral-600 shadow-inner text-white text-sm w-full h-full">
           <button @click="authStore.signOut">
             <Icon icon="material-symbols:logout" height="22px" />
           </button>
