@@ -57,7 +57,7 @@ export const useCurrentEventsStore = defineStore({
     async ApiGetEventsWithOdds(sport: string) {
       try {
         if (!this.currentEvents[sport]) {
-          const response = await axios.get(`https://api.the-odds-api.com/v4/sports/${sport}/odds?apiKey=${import.meta.env.ODDS_API_KEY}&regions=au&markets=h2h&dateFormat=iso&oddsFormat=decimal&bookmakers=ladbrokes_au%2Cneds%2Csportsbet%2Cunibet%2Ctab`);
+          const response = await axios.get(`https://api.the-odds-api.com/v4/sports/${sport}/odds?apiKey=${process.env.ODDS_API_KEY}&regions=au&markets=h2h&dateFormat=iso&oddsFormat=decimal&bookmakers=ladbrokes_au%2Cneds%2Csportsbet%2Cunibet%2Ctab`);
           this.currentEvents[sport] = response.data;
         }
 
