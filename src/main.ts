@@ -11,7 +11,7 @@ import { getFirestore } from 'firebase/firestore';
 import { useBetsStore } from './stores/betsStore';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-const firebaseAPIKey = import.meta.env.VITE_FIREBASE_API_KEY;
+const firebaseAPIKey = import.meta.env.FIREBASE_API_KEY;
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: firebaseAPIKey,
