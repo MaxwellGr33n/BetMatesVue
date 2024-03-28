@@ -39,8 +39,8 @@ onAuthStateChanged(auth, async (user) => {
  if (user) {
     // User is signed in, update the store
    authStore.user = user;
-   authStore.isLoggedIn = true;
    await betsStore.fetchAndPopulateUserData(user.uid);
+   authStore.isLoggedIn = true;
  } else {
     // User is signed out
     authStore.user = null;
