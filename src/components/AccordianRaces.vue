@@ -2,7 +2,7 @@
   <section v-if="!currentEventsStore.errored" class="w-full flex flex-col px-3 pb-3">
     <div class="relative">
       <teleport to="body">
-        <div class="fixed top-0 left-0 bg-black/50 w-screen h-screen flex justify-center items-center" v-if="notificationStore.isOpen">
+        <div class="fixed top-0 left-0 bg-black/40 w-screen h-screen flex justify-center items-center" v-if="notificationStore.isOpen">
           <modal-content :title="betStore.betOutcomeMsg" :msg="betStore.isErrored ? betStore.errMsg : betStore.notificationMsg" />
         </div>
       </teleport>
