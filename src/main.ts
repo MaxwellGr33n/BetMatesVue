@@ -33,14 +33,14 @@ app.use(router);
 
 const auth = getAuth();
 const authStore = useAuthStore();
-const betStore = useBetsStore();
+const betsStore = useBetsStore();
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
  if (user) {
     // User is signed in, update the store
-    authStore.user = user;
-    authStore.isLoggedIn = true;
-    betStore.fetchAndPopulateUserData(user.uid);
+   authStore.user = user;
+   authStore.isLoggedIn = true;
+   await betsStore.fetchAndPopulateUserData(user.uid);
  } else {
     // User is signed out
     authStore.user = null;
