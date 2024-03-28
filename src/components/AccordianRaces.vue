@@ -49,7 +49,10 @@
               <p class="h-1/3 pt-1 md:text-lg font-semibold">{{ item.away_team.split(" ").pop() }}</p>
             </div>
           </div>
-          <div class="flex flex-col items-center justify-between">
+          <div class="flex items-center justify-center" v-if="!authStore.isLoggedIn">
+            <p class="text-xl">Log in now to see live odds</p>
+          </div>
+          <div class="flex flex-col items-center justify-between" v-if="authStore.isLoggedIn">
             <div class="flex items-center justify-center">
               <p class="text-gray-500 pr-1">$</p>
               <input
@@ -60,7 +63,7 @@
                 v-model="userInputAmount"
               />
             </div>
-            <div v-for="bookmaker in item.bookmakers" :key="bookmaker.key" class="flex flex-col items-center w-5/6">
+            <div v-for="bookmaker in item.bookmakers" :key="bookmaker.key" class="flex flex-col items-center w-5/6" v-if="authStore.isLoggedIn">
               <svg class="w-[10%] h-12 absolute mt-2" aria-hidden="true">
                 <use :href="`/Bookmakers.svg#${bookmaker.key}`"></use>
               </svg>
