@@ -4,19 +4,18 @@ import { onMounted } from "vue";
 import { useCurrentEventsStore } from "./stores/currentEventsStore";
 import NavBar from "./components/NavBar.vue";
 import QuickLinks from "./components/QuickLinks.vue";
-import { useBetsStore } from "./stores/betsStore";
 
 const currentEventsStore = useCurrentEventsStore();
-const betsStore = useBetsStore();
 
 onMounted(async () => {
   currentEventsStore.loading = true;
-  // await currentEventsStore.ApiGetEventsWithOdds("aussierules_afl");
+  await currentEventsStore.ApiGetEventsWithOdds("aussierules_afl");
   currentEventsStore.updateFilteredEvents("aussierules_afl");
+  await currentEventsStore.ApiGetEventsWithOdds("rugbyleague_nrl");
+  await currentEventsStore.ApiGetEventsWithOdds("soccer_australia_aleague");
+  await currentEventsStore.ApiGetEventsWithOdds("baseball_mlb");
+  await currentEventsStore.ApiGetEventsWithOdds("basketball_nba");
   currentEventsStore.loading = false;
-  console.log(JSON.stringify(currentEventsStore.currentEvents, null, 2));
-  console.log(JSON.stringify(betsStore.bets));
-  console.log(betsStore.userId);
 });
 </script>
 
