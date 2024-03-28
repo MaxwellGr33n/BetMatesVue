@@ -1,7 +1,7 @@
 <template>
   <nav class="flex justify-center fixed top-0 bg-violet-500 h-12 w-screen z-10">
     <div class="flex justify-between items-center w-screen sm:w-4/5 max-w-screen-lg">
-      <RouterLink to="/" class="font-logo font-bold pl-2 italic text-2xl text-white">BETMATES</RouterLink>
+      <RouterLink to="/" class="font-logo font-medium pl-2 italic text-2xl text-white">BETMATES</RouterLink>
       <ul class="flex justify-center items-center h-full">
         <li v-if="!authStore.isLoggedIn" class="flex border-l-[1px] px-2 border-neutral-600 shadow-inner text-white text-sm w-full h-full">
           <RouterLink class="flex items-center" to="/login">Login</RouterLink>
@@ -10,14 +10,14 @@
           <RouterLink class="flex items-center" to="/register">Register</RouterLink>
         </li>
         <li
-          v-if="authStore.isLoggedIn"
+          v-if="betStore.accountBalance"
           @click="betStore.addMoney(1)"
           class="flex items-center cursor-pointer border-l-[1px] pl-2 pr-1 border-neutral-600 shadow-inner text-white text-sm w-full h-full"
         >
           <p class="text-nowrap px-1" v-if="authStore.user?.displayName">Funds: ${{ betStore.accountBalance.toFixed(2) }}</p>
         </li>
         <li
-          v-if="authStore.isLoggedIn"
+          v-if="authStore.user?.displayName"
           class="flex items-center border-l-[1px] pl-2 pr-1 border-neutral-600 shadow-inner text-white text-sm w-full h-full"
         >
           <Icon icon="material-symbols:account-circle" height="28px" />
