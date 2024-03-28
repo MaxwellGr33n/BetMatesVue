@@ -1,5 +1,12 @@
 <template>
   <section v-if="!currentEventsStore.errored" class="w-full flex flex-col px-3 pb-3">
+    <div class="relative">
+      <teleport to="body">
+        <div class="fixed top-0 left-0 bg-black/50 w-screen h-screen flex justify-center items-center" v-if="notificationStore.isOpen">
+          <modal-content :title="betStore.betOutcomeMsg" :msg="betStore.isErrored ? betStore.errMsg : betStore.notificationMsg" />
+        </div>
+      </teleport>
+    </div>
     <div class="flex items-center pb-3">
       <h2 class="flex text-lg font-semibold">Next Events</h2>
       <Icon icon="material-symbols:arrow-forward-ios" />
@@ -42,17 +49,51 @@
               <p class="h-1/3 pt-1 md:text-lg font-semibold">{{ item.away_team.split(" ").pop() }}</p>
             </div>
           </div>
-          <div class="flex items-center justify-between px-6 md:px-24 py-4">
-            <button
-              class="text-sm font-semibold cursor-pointer leading-6 px-5 py-3 rounded-full text-gray-900 bg-white hover:bg-neutral-50 dark:text-neutral-50 dark:bg-gray-800 dark:hover:bg-gray-900 hover:shadow-md focus:shadow-md"
-            >
-              {{ (Math.random() * 9 + 1).toFixed(2) }}
-            </button>
-            <button
-              class="text-sm font-semibold cursor-pointer leading-6 px-5 py-3 rounded-full text-gray-900 bg-white hover:bg-neutral-50 dark:text-neutral-50 dark:bg-gray-800 dark:hover:bg-gray-900 hover:shadow-md focus:shadow-md"
-            >
-              {{ (Math.random() * 9 + 1).toFixed(2) }}
-            </button>
+          <div class="flex flex-col items-center justify-between">
+            <div class="flex items-center justify-center">
+              <p class="text-gray-500 pr-1">$</p>
+              <input
+                class="appearance-none w-32 rounded-md bg-white border-b-2 text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+                type="text"
+                placeholder="Stake amount"
+                aria-label="Bet Amount"
+                v-model="userInputAmount"
+              />
+            </div>
+            <div v-for="bookmaker in item.bookmakers" :key="bookmaker.key" class="flex flex-col items-center w-5/6">
+              <svg class="w-[10%] h-12 absolute mt-2" aria-hidden="true">
+                <use :href="`/Bookmakers.svg#${bookmaker.key}`"></use>
+              </svg>
+              <div class="flex w-full items-center justify-between">
+                <div v-for="outcome in bookmaker.markets[0].outcomes" :key="outcome.name" class="flex items-center justify-between py-4">
+                  <button
+                    @click="
+                      {
+                        const betData = betStore.createBetsData(item.id, outcome.price, +userInputAmount, outcome.name, bookmaker.title);
+                        if (betData) {
+                          betStore.placeBet(authStore.user?.uid ?? 'defaultUid', betData);
+                        }
+                        notificationStore.isOpen = true;
+                      }
+                    "
+                    :class="[
+                      'text-sm font-semibold min-w-16 cursor-pointer leading-6 px-3 py-1 rounded-md text-white hover:shadow-md focus:shadow-md',
+                      bookmaker.key === 'neds'
+                        ? 'bg-orange-500 hover:bg-orange-600'
+                        : bookmaker.key === 'ladbrokes_au'
+                        ? 'bg-red-600 hover:bg-red-700'
+                        : bookmaker.key === 'sportsbet'
+                        ? 'bg-blue-800 hover:bg-blue-900'
+                        : bookmaker.key === 'tab' || bookmaker.key === 'unibet'
+                        ? 'bg-green-700 hover:bg-green-800'
+                        : '',
+                    ]"
+                  >
+                    {{ outcome.price }}
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </li>
@@ -61,10 +102,22 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { Icon } from "@iconify/vue/dist/iconify.js";
 import { useCurrentEventsStore, type IcurrentEventsData } from "@/stores/currentEventsStore";
+import { useBetsStore } from "@/stores/betsStore";
+import { useAuthStore } from "@/stores/authStore";
+import { useNotificationStore } from '@/stores/notificationStore';
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "@/main";
+import ModalContent from './ModalContent.vue';
 
+const notificationStore = useNotificationStore();
 const currentEventsStore = useCurrentEventsStore();
+const authStore = useAuthStore();
+const betStore = useBetsStore();
+const userRef = doc(db, "users", authStore.user?.uid ?? "defaultUid");
+const userInputAmount = ref('');
 
 const toggleActive = (event: IcurrentEventsData) => {
   Object.values(currentEventsStore.currentEvents).flat().forEach((link) => {
@@ -79,4 +132,10 @@ const toggleActive = (event: IcurrentEventsData) => {
     event.isClicked = false;
   }, 100);
 };
+
+onSnapshot(userRef, (docSnapshot) => {
+  if (docSnapshot.exists()) {
+    betStore.accountBalance = docSnapshot.data().accountBalance;
+  }
+});
 </script>
