@@ -16,6 +16,13 @@
         </li>
         <li
           v-if="authStore.isLoggedIn"
+          @click="betStore.addMoney(1)"
+          class="flex items-center cursor-pointer border-l-[1px] pl-2 pr-1 border-neutral-600 shadow-inner text-white text-sm w-full h-full"
+        >
+          <p class="text-nowrap px-1" v-if="authStore.user?.displayName">Funds: ${{ betStore.accountBalance.toFixed(2) }}</p>
+        </li>
+        <li
+          v-if="authStore.isLoggedIn"
           class="flex items-center border-l-[1px] pl-2 pr-1 border-neutral-600 shadow-inner text-white text-sm w-full h-full"
         >
           <Icon icon="material-symbols:account-circle" height="28px" />
@@ -36,6 +43,8 @@
 import { Icon } from "@iconify/vue/dist/iconify.js";
 import { RouterLink } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
+import { useBetsStore } from "@/stores/betsStore";
 
+const betStore = useBetsStore();
 const authStore = useAuthStore();
 </script>
