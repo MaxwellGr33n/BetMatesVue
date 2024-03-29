@@ -1,5 +1,5 @@
 <template>
-  <section class="w-full">
+  <section class="w-full pb-2 md:pb-4">
     <img class="" src="@/assets/images/Betmates Live Cover.jpg" />
   </section>
 </template>
