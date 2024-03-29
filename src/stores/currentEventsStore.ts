@@ -51,13 +51,54 @@ export const useCurrentEventsStore = defineStore({
  actions: {
 
     /**
-     * Fetches events for a given sport. This API call has no cost
+     * Fetches events and odds for a given sport. This API call has a cost of 1
      * @param {string} sport - The sport for which to fetch events.
      */
     async ApiGetEventsWithOdds(sport: string) {
       try {
         if (!this.currentEvents[sport]) {
-          const response = await axios.get(`https://api.the-odds-api.com/v4/sports/${sport}/odds?apiKey=${process.env.ODDS_API_KEY}&regions=au&markets=h2h&dateFormat=iso&oddsFormat=decimal&bookmakers=ladbrokes_au%2Cneds%2Csportsbet%2Cunibet%2Ctab`);
+          const response = await axios.get(`https://api.the-odds-api.com/v4/sports/${sport}/odds?apiKey=${process.env.ODDS_API_KEY}&regions=au&markets=h2h&dateFormat=iso&oddsFormat=decimal&bookmakers=ladbrokes_au%2Cneds%2Csportsbet%2Cunibet%2Ctab`); //prod ready call
+          // const response = await axios.get(`https://api.the-odds-api.com/v4/sports/${sport}/odds?apiKey=${import.meta.env.VITE_ODDS_API_KEY}&regions=au&markets=h2h&dateFormat=iso&oddsFormat=decimal&bookmakers=ladbrokes_au%2Cneds%2Csportsbet%2Cunibet%2Ctab`);
+          this.currentEvents[sport] = response.data;
+        }
+
+        for (const event of this.currentEvents[sport]) {
+          switch (sport) {
+            case 'aussierules_afl':
+            event.sports_icon = 'mdi:football-australian';
+            break;
+            case 'rugbyleague_nrl':
+            event.sports_icon = 'material-symbols:sports-rugby';
+            break;
+            case 'americanfootball_nfl':
+            event.sports_icon = 'ion:american-football';
+            break;
+            case 'soccer_australia_aleague':
+            event.sports_icon = 'game-icons:soccer-ball';
+            break;
+            case 'baseball_mlb':
+            event.sports_icon = 'ion:baseball';
+            break;
+            case 'basketball_nba':
+            event.sports_icon = 'solar:basketball-bold';
+            break;
+          }
+        }
+      } catch (error) {
+        console.error(error);
+        this.errored = true;
+      } finally {
+        this.loading = false;
+      }
+    },
+    /**
+     * Fetches events for a given sport. This API call has a cost of 0
+     * @param {string} sport - The sport for which to fetch events.
+     */
+    async ApiGetEvents(sport: string) {
+      try {
+        if (!this.currentEvents[sport]) {
+          const response = await axios.get(`https://api.the-odds-api.com/v4/sports/${sport}/events?apiKey=${import.meta.env.VITE_ODDS_API_KEY}&dateFormat=iso`);
           this.currentEvents[sport] = response.data;
         }
 
@@ -230,6 +271,13 @@ export const useCurrentEventsStore = defineStore({
 
     formatTime(isoTime: string): string {
       const date = new Date(isoTime);
+      const now = new Date();
+
+      // Check if the event's commence time is before the current time
+      if (date < now) {
+          return "LIVE";
+      }
+      
       const weekday = date.toLocaleDateString('en-US', { weekday: 'long' });
       const day = date.getDate();
       const suffix = day % 10 === 1 && day !== 11 ? 'st' :
