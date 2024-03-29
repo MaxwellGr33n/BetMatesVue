@@ -2,7 +2,7 @@
   <section v-if="!currentEventsStore.errored" class="w-full flex flex-col px-3 pb-3">
     <div class="relative">
       <teleport to="body">
-        <div class="fixed top-0 left-0 bg-black/40 w-screen h-screen flex justify-center items-center" v-if="notificationStore.isOpen">
+        <div class="fixed top-0 left-0 bg-black/40 w-screen h-screen flex justify-center items-center p-4" v-if="notificationStore.isOpen">
           <modal-content :title="betStore.betOutcomeMsg" :msg="betStore.isErrored ? betStore.errMsg : betStore.notificationMsg" />
         </div>
       </teleport>
@@ -39,7 +39,14 @@
               <p class="h-1/3 pt-1 md:text-lg font-semibold">{{ item.home_team.split(" ").pop() }}</p>
             </div>
             <div class="pt-3 flex flex-col items-center justify-between text-sm md:text-md">
-              <p class="text-xs md:text-lg">{{ currentEventsStore.formatTime(item.commence_time) }}</p>
+              <p
+                :class="[
+                  'text-xs md:text-lg bg-neutral-50 rounded-md px-2',
+                  { 'bg-red-500 text-white font-semibold': currentEventsStore.formatTime(item.commence_time) === 'LIVE' },
+                ]"
+              >
+                {{ currentEventsStore.formatTime(item.commence_time) }}
+              </p>
               <p class="pb-10 text-xl font-medium">vs</p>
             </div>
             <div class="flex flex-col pt-10 items-center justify-between">
@@ -53,7 +60,7 @@
             <p class="text-xl p-5">Log in now to see live odds</p>
           </div>
           <div class="flex flex-col items-center justify-between" v-if="authStore.isLoggedIn">
-            <div class="flex items-center justify-center">
+            <div v-if="item.bookmakers" class="flex items-center justify-center">
               <p class="text-gray-500 pr-1">$</p>
               <input
                 class="appearance-none w-32 rounded-md bg-white border-b-2 text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
@@ -74,7 +81,7 @@
                       {
                         const betData = betStore.createBetsData(item.id, outcome.price, +userInputAmount, outcome.name, bookmaker.title);
                         if (betData) {
-                          betStore.placeBet(authStore.user?.uid ?? 'defaultUid', betData);
+                          betStore.placeBet(betData);
                         }
                         notificationStore.isOpen = true;
                       }
