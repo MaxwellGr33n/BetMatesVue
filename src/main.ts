@@ -5,14 +5,15 @@ import router from './router';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useAuthStore } from './stores/authStore';
 import './assets/styles.css'
-// Import the functions you need from the SDKs you need
+
 import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
 import { useBetsStore } from './stores/betsStore';
 // TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-const firebaseAPIKey = process.env.FIREBASE_API_KEY;
-// Your web app's Firebase configuration
+
+const firebaseAPIKey = process.env.FIREBASE_API_KEY; 
+// const firebaseAPIKey = import.meta.env.VITE_FIREBASE_API_KEY; //dev import
+
 const firebaseConfig = {
   apiKey: firebaseAPIKey,
   authDomain: "betmates-e4e02.firebaseapp.com",
@@ -37,12 +38,10 @@ const betsStore = useBetsStore();
 
 onAuthStateChanged(auth, async (user) => {
  if (user) {
-    // User is signed in, update the store
-   authStore.user = user;
-   await betsStore.fetchAndPopulateUserData(user.uid);
-   authStore.isLoggedIn = true;
+    authStore.user = user;
+    await betsStore.fetchAndPopulateUserData();
+    authStore.isLoggedIn = true;
  } else {
-    // User is signed out
     authStore.user = null;
     authStore.isLoggedIn = false;
  }
