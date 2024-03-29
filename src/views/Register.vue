@@ -1,6 +1,6 @@
 <template>
   <div class="w-full max-w-sm mt-10">
-    <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="submitForm">
       <div class="mb-3">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="displayName"> Display Name </label>
         <p v-if="authStore.errored" class="text-red-600 text-xs mb-2">{{ authStore.errMsg }}</p>
