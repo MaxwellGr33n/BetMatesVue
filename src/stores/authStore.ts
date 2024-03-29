@@ -13,6 +13,7 @@ export const useAuthStore = defineStore({
  state: () => ({
     user: ref<User | null>(null),
     isLoggedIn: false,
+    isRegistering: false,
     loading: false,
     errored: false,
     errMsg: ref(''),
@@ -66,9 +67,9 @@ export const useAuthStore = defineStore({
         const userDoc = await getDoc(userRef);
 
         if (!betslipDoc.exists()) {
-          await betsStore.initBetslip(result.user.uid);
+          await betsStore.initBetslip();
         } else if (!userDoc.exists()) {
-          await betsStore.initBalance(result.user.uid);
+          await betsStore.initBalance();
         } else {
           console.log("User already has a betslip and user document.");
         }
@@ -85,6 +86,7 @@ export const useAuthStore = defineStore({
 
     async register(email: string, password: string, displayName: string) {
       this.loading = true;
+      this.isRegistering = true;
       this.errored = false;
       this.errMsg = '';
       try {
@@ -93,9 +95,11 @@ export const useAuthStore = defineStore({
         this.user = result.user;
         await updateProfile(result.user, { displayName });
         const betsStore = useBetsStore();
-        await betsStore.initBetslip(result.user.uid); 
-        await betsStore.initBalance(result.user.uid);
+        await betsStore.initBetslip(); 
+        await betsStore.initBalance();
         this.isLoggedIn = true;
+        this.isRegistering = false;
+        betsStore.fetchAndPopulateUserData();
       } catch (error) {
         this.errored = true;
         switch ((error as FirebaseError).code) {
