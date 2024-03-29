@@ -63,7 +63,7 @@ const handleGoogleSignIn = async () => {
 onMounted(() => {
   const auth = getAuth();
   onAuthStateChanged(auth, (user) => {
-    if (authStore.isLoggedIn) {
+    if (user) {
       router.push("/");
     }
   });

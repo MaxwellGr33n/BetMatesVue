@@ -84,11 +84,9 @@ const submitForm = () => {
 onMounted(() => {
   const auth = getAuth();
   onAuthStateChanged(auth, (user) => {
-    if (authStore.isLoggedIn) {
+    if (user) {
       router.push("/");
     }
   });
 });
 </script>
-
-<style scoped></style>
