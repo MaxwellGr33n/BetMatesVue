@@ -70,7 +70,7 @@
                 v-model="userInputAmount"
               />
             </div>
-            <div v-for="bookmaker in item.bookmakers" :key="bookmaker.key" class="flex flex-col items-center w-5/6" v-if="authStore.isLoggedIn">
+            <div v-for="bookmaker in item.bookmakers" :key="bookmaker.key" class="flex flex-col items-center w-5/6">
               <svg class="w-[8%] md:w-[10%] h-12 absolute mt-2" aria-hidden="true">
                 <use :href="`/Bookmakers.svg#${bookmaker.key}`"></use>
               </svg>

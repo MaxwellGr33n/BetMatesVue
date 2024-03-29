@@ -1,6 +1,6 @@
 // src/stores/betsStore.ts
 import { defineStore } from 'pinia';
-import { doc, setDoc, arrayUnion, getDoc, runTransaction, onSnapshot } from 'firebase/firestore';
+import { doc, setDoc, arrayUnion, getDoc, runTransaction } from 'firebase/firestore';
 import { db } from '@/main';
 import { v4 as uuidv4 } from 'uuid';
 import { ref } from 'vue';

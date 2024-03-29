@@ -24,7 +24,7 @@ import { useNotificationStore } from "@/stores/notificationStore";
 
 const notificationStore = useNotificationStore();
 
-const props = defineProps({
+defineProps({
   title: String,
   msg: String,
 });
