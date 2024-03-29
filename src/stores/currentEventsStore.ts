@@ -269,23 +269,23 @@ export const useCurrentEventsStore = defineStore({
       }
     },
 
-    formatTime(isoTime: string): string {
-      const date = new Date(isoTime);
-      const now = new Date();
+    formatTime(isoTime: string, toFormatEvent: boolean): string {
+        const date = new Date(isoTime);
+        const now = new Date();
 
-      // Check if the event's commence time is before the current time
-      if (date < now) {
-          return "LIVE";
-      }
-      
-      const weekday = date.toLocaleDateString('en-US', { weekday: 'long' });
-      const day = date.getDate();
-      const suffix = day % 10 === 1 && day !== 11 ? 'st' :
-                  day % 10 === 2 && day !== 12 ? 'nd' :
-                  day % 10 === 3 && day !== 13 ? 'rd' : 'th';
-      const hour = date.getHours().toString().padStart(2, '0');
-      const minute = date.getMinutes().toString().padStart(2, '0');
-      return `${weekday} ${day}${suffix} ${hour}:${minute}`;
+        // Check if the event's commence time is before the current time
+        if (toFormatEvent && date < now) {
+            return "LIVE";
+        }
+
+        const weekday = date.toLocaleDateString('en-US', { weekday: 'long' });
+        const day = date.getDate();
+        const suffix = day % 10 === 1 && day !== 11 ? 'st' :
+                        day % 10 === 2 && day !== 12 ? 'nd' :
+                        day % 10 === 3 && day !== 13 ? 'rd' : 'th';
+        const hour = date.getHours().toString().padStart(2, '0');
+        const minute = date.getMinutes().toString().padStart(2, '0');
+        return `${weekday} ${day}${suffix} ${hour}:${minute}`;
     }
  },
 });

@@ -42,10 +42,10 @@
               <p
                 :class="[
                   'text-xs md:text-lg bg-neutral-50 rounded-md px-2',
-                  { 'bg-red-500 text-white font-semibold': currentEventsStore.formatTime(item.commence_time) === 'LIVE' },
+                  { 'bg-red-500 text-white font-semibold': currentEventsStore.formatTime(item.commence_time, true) === 'LIVE' },
                 ]"
               >
-                {{ currentEventsStore.formatTime(item.commence_time) }}
+                {{ currentEventsStore.formatTime(item.commence_time, true) }}
               </p>
               <p class="pb-10 text-xl font-medium">vs</p>
             </div>

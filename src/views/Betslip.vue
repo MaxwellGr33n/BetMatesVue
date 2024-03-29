@@ -38,6 +38,6 @@ const authStore = useAuthStore();
 const currentEventsStore = useCurrentEventsStore();
 
 const formatTime = (isoTime: string): string => {
-  return currentEventsStore.formatTime(isoTime);
+  return currentEventsStore.formatTime(isoTime, false);
 };
 </script>
