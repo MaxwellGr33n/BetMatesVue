@@ -8,8 +8,8 @@
           width="120px"
         />
         <div class="w-full ml-7">
-          <h2 class="mt-2 text-center text-white font-semibold text-lg">UFC 300 MAIN EVENT:</h2>
-          <p class="text-center text-white">PEREIRA VS HILL</p>
+          <h2 class="mt-2 text-center text-white font-semibold text-lg">UFC 302 MAIN EVENT:</h2>
+          <p class="text-center text-white">MAKHACHEV VS POIRIER</p>
         </div>
         <Icon icon="material-symbols:arrow-forward-ios" height="28px" style="color: white" />
       </div>
