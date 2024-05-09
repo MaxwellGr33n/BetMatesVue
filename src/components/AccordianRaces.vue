@@ -31,25 +31,25 @@
           </div>
         </a>
         <div v-if="item.active" class="flex flex-col w-full bg-neutral-200">
-          <div class="grid grid-cols-3 grid-rows-1">
-            <div class="flex flex-col pt-10 items-center justify-center">
+          <div class="grid grid-cols-3 grid-rows-1 pb-10 pt-4">
+            <div class="flex flex-col m-auto items-center justify-center">
               <svg class="h-32 md:h-52 w-full" aria-hidden="true">
                 <use :href="`/Teams.svg#${item.home_team}`"></use>
               </svg>
               <p class="h-1/3 pt-1 md:text-lg font-semibold">{{ item.home_team.split(" ").pop() }}</p>
             </div>
-            <div class="pt-3 flex flex-col items-center justify-between text-sm md:text-md">
+            <div class="flex flex-col items-center justify-between text-sm md:text-md">
               <p
                 :class="[
-                  'text-xs md:text-lg bg-neutral-50 rounded-md px-2',
+                  'text-xs md:text-lg text-center bg-neutral-50 rounded-md px-2',
                   { 'bg-red-500 text-white font-semibold': currentEventsStore.formatTime(item.commence_time, true) === 'LIVE' },
                 ]"
               >
                 {{ currentEventsStore.formatTime(item.commence_time, true) }}
               </p>
-              <p class="pb-10 text-xl font-medium">vs</p>
+              <p class="align-text-top text-xl font-medium">vs</p>
             </div>
-            <div class="flex flex-col pt-10 items-center justify-between">
+            <div class="flex flex-col m-auto items-center justify-between">
               <svg class="h-32 md:h-52 w-full" aria-hidden="true">
                 <use :href="`/Teams.svg#${item.away_team}`"></use>
               </svg>
@@ -59,19 +59,23 @@
           <div class="flex items-center justify-center" v-if="!authStore.isLoggedIn">
             <p class="text-xl p-5">Log in now to see live odds</p>
           </div>
-          <div class="flex flex-col items-center justify-between" v-if="authStore.isLoggedIn">
-            <div v-if="item.bookmakers" class="flex items-center justify-center">
-              <p class="text-gray-500 pr-1">$</p>
-              <input
-                class="appearance-none w-32 rounded-md bg-white border-b-2 text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
-                type="text"
-                placeholder="Stake amount"
-                aria-label="Bet Amount"
-                v-model="userInputAmount"
-              />
+          <div class="flex flex-col items-center" v-if="authStore.isLoggedIn">
+            <div v-if="item.bookmakers" class="flex w-11/12 items-center justify-center pb-4">
+              <h2 class="flex-1 text-sm md:text-lg mr-auto pr-1">{{ item.home_team }}</h2>
+              <div class="flex flex-1 justify-center items-center">
+                <p class="text-gray-500 pr-1">$</p>
+                <input
+                  class="appearance-none w-32 rounded-md bg-white text-gray-700 py-1 px-2 leading-tight text-center focus:outline-none"
+                  type="text"
+                  placeholder="Stake amount"
+                  aria-label="Bet Amount"
+                  v-model="userInputAmount"
+                />
+              </div>
+              <h2 class="flex-1 text-sm md:text-lg ml-auto text-right pl-1">{{ item.away_team }}</h2>
             </div>
-            <div v-for="bookmaker in item.bookmakers" :key="bookmaker.key" class="flex flex-col items-center w-5/6">
-              <svg class="w-[8%] md:w-[10%] h-12 absolute mt-2" aria-hidden="true">
+            <div v-for="bookmaker in item.bookmakers" :key="bookmaker.key" class="flex flex-col items-center w-5/ border-t border-gray-300 w-11/12">
+              <svg class="w-[10%] h-12 absolute mt-2" aria-hidden="true">
                 <use :href="`/Bookmakers.svg#${bookmaker.key}`"></use>
               </svg>
               <div class="flex w-full items-center justify-between">
@@ -99,7 +103,7 @@
                         : '',
                     ]"
                   >
-                    {{ outcome.price }}
+                    ${{ outcome.price.toFixed(2) }}
                   </button>
                 </div>
               </div>
