@@ -201,7 +201,7 @@ export const useBetsStore = defineStore({
         transaction.update(userRef, { accountBalance: newBalance });
         transaction.update(betslipRef, { bets: arrayUnion(betData) });
         this.betOutcomeMsg = "Bet Success";
-        this.notificationMsg = "Bet Placed for $ " + betData.amountBet + " With " + betData.bookmaker + " For " + betData.teamToWin + " to win";
+        this.notificationMsg = "Bet Placed for $" + betData.amountBet + " With " + betData.bookmaker + " For " + betData.teamToWin + " to win";
         console.log("bet placed");
       }).then(async () => {
         // After the transaction, update the local state with the latest data
