@@ -7,14 +7,15 @@
           <svg class="h-24 md:h-32 w-24 md:w-32 p-2" aria-hidden="true">
             <use :href="`/Teams.svg#${bet.teamToWin}`"></use>
           </svg>
-          <div class="p-2">
-            <h2 class="text-lg font-medium">{{ bet.teamToWin }} @ {{ bet.h2hOdds }}</h2>
+          <div class="p-2 mt-4">
+            <h2 class="text-lg font-semibold">{{ bet.teamToWin }} @ {{ bet.h2hOdds }}</h2>
             <p>Stake: ${{ bet.amountBet }}</p>
+            <p class="font-medium">Potential Winnings: ${{ (bet.h2hOdds * bet.amountBet).toFixed(2) }}</p>
             <p>Bookmaker: {{ bet.bookmaker }}</p>
-            <p>Time Placed: {{ formatTime(bet.timePlaced) }}</p>
+            <p>Placed: {{ formatTime(bet.timePlaced) }}</p>
           </div>
         </div>
-        <p class="text-xs text-gray-300">{{ bet.betID }}</p>
+        <p class="pl-2 text-xs text-gray-300">BetUID: {{ bet.betID }}</p>
       </div>
     </div>
     <div v-else>
