@@ -79,7 +79,10 @@
                 <use :href="`/Bookmakers.svg#${bookmaker.key}`"></use>
               </svg>
               <div class="flex w-full items-center justify-between">
-                <div v-for="outcome in bookmaker.markets[0].outcomes" :key="outcome.name" class="flex items-center justify-between py-4">
+                <div
+                  v-for="outcome in sortedOutcomes(bookmaker.markets[0].outcomes, item.home_team, item.away_team)"
+                  class="flex items-center justify-between py-4"
+                >
                   <button
                     @click="
                       {
@@ -118,7 +121,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Icon } from "@iconify/vue/dist/iconify.js";
-import { useCurrentEventsStore, type IcurrentEventsData } from "@/stores/currentEventsStore";
+import { useCurrentEventsStore, type IOutcome, type IcurrentEventsData } from "@/stores/currentEventsStore";
 import { useBetsStore } from "@/stores/betsStore";
 import { useAuthStore } from "@/stores/authStore";
 import { useNotificationStore } from '@/stores/notificationStore';
@@ -145,6 +148,14 @@ const toggleActive = (event: IcurrentEventsData) => {
   setTimeout(() => {
     event.isClicked = false;
   }, 100);
+};
+
+const sortedOutcomes = (outcomes: IOutcome[], homeTeam: string, awayTeam: string) => {
+  return outcomes.sort((a: IOutcome, b: IOutcome) => {
+    if (a.name === homeTeam) return -1;
+    if (a.name === awayTeam) return 1;
+    return 0;
+  });
 };
 
 onSnapshot(userRef, (docSnapshot) => {
